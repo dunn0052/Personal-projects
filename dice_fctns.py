@@ -28,6 +28,9 @@ def pick(n, r):
     #nPr
 
 def binomial_at_least(n,k,p):
+    #n = number of tries
+    #k = number of successes
+    #p = probablity of success per try
     prob = 0
     while(n>=k):
         prob = prob + choose(n,k)*(p)**k*(1-p)**(n-k)
