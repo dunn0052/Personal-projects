@@ -42,4 +42,4 @@ def WOD(n,k):
     print(round(binomial_at_least(n,k,0.3)*100),  "%")
 
 
-WOD(,4)
+
