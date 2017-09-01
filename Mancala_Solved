@@ -1,0 +1,133 @@
+import edu.princeton.cs.algs4.*;
+import java.util.Arrays;
+
+
+public class Mancala_loop {
+	
+	/* This program finds the winning move sets in a simplified game of mancala. The simplified rules are: 
+	 * 1. If the last bead you drop lands in a non-empty pit, then you pick that one and continue
+	 * 2. If your last bead ends up in your mancala (right hand score pit) then you may go again.
+	 * 3. No "capturing"
+	 * 4. Since there are 48 total beads (12 pits * 4 beads), a winning score would be more than half (25)
+	 * The results are unverified as I don't own a mancala board, yet. The winning numbers correspond
+	 * to the pits on your side. Starting with the left at 1, and the rightmost at 6. Ignore the trailing zeros.
+	 * The board_state function does a depth first search while building the board state tree by returning
+	 * to previous state once possibilities of the branch have been observed. Check out the results on mancala_winners.txt.
+	 * - dunn0052
+	 */
+
+		
+		public static void board_state(int[] j, int n, int[] a) /* j is current board state, n is number of moves, 
+																                             * and a is the winning numbers list being passed between recursive calls
+																                             */
+		{
+			
+			
+			if(j[7] == 25) // checks the score
+			{
+				StdOut.println("WINNER");
+				StdOut.println("score of " + j[7]);
+				StdOut.println(Arrays.toString(a));
+			}
+			
+			int[] s = new int[14]; // dummy array to be copied to so that original doesn't get mutated
+			
+			copy_array(j,s);
+			if(pick(s,1))
+			{
+				a[n] = (1);
+				board_state(s, n+1, a);
+			}
+			copy_array(j,s);
+			if(pick(s,2))
+			{
+				a[n] = (2);
+				board_state(s, n+1, a);
+			}
+			copy_array(j,s);
+			if(pick(s,3))
+			{
+				a[n] = (3);
+				board_state(s, n+1, a);
+			}
+			copy_array(j,s);
+			if(pick(s,4))
+			{
+				a[n] = (4);
+				board_state(s, n+1, a);
+			}
+			copy_array(j,s);
+			if(pick(s,5))
+			{
+				a[n] = (5);
+				board_state(s, n+1, a);
+			}
+			copy_array(j,s);
+			if(pick(s,6))
+			{
+				a[n] = (6);
+				board_state(s, n+1, a);
+			}
+		}
+
+
+	public static boolean pick(int[] j, int m) //initial bead pick up
+	{
+		
+		
+		boolean[] q = new boolean[1]; // passing boolean through recursion
+		if(j[m] != 0)
+		{
+			int n = j[m];
+			j[m] = 0;
+			move(j, (m+1)%14, n, q);
+		}
+		return q[0];
+	}
+
+	public static void move(int[] j, int m, int n, boolean[] q)
+	{
+		
+		if(n == 1 && j[m] != 0 && m != 0 && m != 7) // last bead pick up again
+		{
+			j[m]++;
+			q[0] = pick(j,m);
+		}
+		else if(n == 1 && m == 7) // last bead in your mancala
+		{
+			j[m]++;
+			q[0] = true;
+		}
+		else if(n != 0 && m != 0) // regular move
+		{
+			j[m]++;
+			move(j, (m+1)%14, n-1, q);
+		}
+		else if(n != 0 && m == 0) // pass other player's mancala
+		{
+			j[m+1]++;
+			move(j, (m+2)%14, n-1, q);
+		}
+	}
+	
+
+	
+	public static void copy_array(int[] j, int[] s)
+	{
+		for(int i = 0; i < j.length; i++)
+		{
+			s[i] = j[i];
+		}
+	}
+	
+
+	
+	public static void main(String[] args) {
+		int[] M = {0,4,4,4,4,4,4,0,4,4,4,4,4,4};
+		int[] a = new int[26];
+		board_state(M, 0, a);
+		
+		
+	}
+
+}
