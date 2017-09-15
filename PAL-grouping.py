@@ -2,7 +2,7 @@
 #PAL group randomizer - This function creates random groups for PAL sessions
 #1. Have students print name on numbered attendence sheet
 #2. Run program with number of students and how many you want per group
-#3. Organize groups by 
+#3. Organize groups by the program results
 
 import random
 
