@@ -10,16 +10,13 @@ def randomizer(n, m):
         a.append(i)
         
     random.shuffle(a)
-
-   # for i in range(len(a)):
-    #    print()
     
     k = 0
     j = n%m
-    while(k < n/m):
+    while(k < n//m):
         print("group", k + 1)
         for i in range(m):
-            print(a[m*i + k] + 1)
+            print(a[m*k + i] + 1)
             if(j != 0 and i == m - 1):
                 print(a[n - j] + 1)
                 j = j - 1
@@ -27,5 +24,4 @@ def randomizer(n, m):
         print("")
 
 
-randomizer(18,4)
-
+randomizer(20,3)
