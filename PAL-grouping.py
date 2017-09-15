@@ -1,4 +1,8 @@
-#PAL group randomizer
+#Created by Kevin Dunn, PAL facilitator 09/13/17
+#PAL group randomizer - This function creates random groups for PAL sessions
+#1. Have students print name on numbered attendence sheet
+#2. Run program with number of students and how many you want per group
+#3. Organize groups by 
 
 import random
 
