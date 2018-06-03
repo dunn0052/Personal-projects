@@ -1,20 +1,26 @@
 #char generator
-
+from csv_writer import CsvData
 import random
 
 
-class WoDChar:
-    def __init__(self):
+class char:
+    def __init__(self, name):
+        
+        self.name = str(name)
 
         self.experience = 0
 
-        self.attributes = {
+        self.physical = {
             "Strength" : 0,
             "Dexterity" : 0,
-            "Stamina" : 0,
+            "Stamina" : 0
+            }
+        self.mental = {
             "Intelligence" : 0,
             "Wits" : 0,
-            "Resolve" : 0,
+            "Resolve" : 0
+            }
+        self.social = {
             "Presence" : 0,
             "Manipulation" : 0,
             "Composure" : 0
@@ -86,8 +92,14 @@ class WoDChar:
 
         #probably a better way to iterate, but works for now
         i = 0
-        for stat in self.attributes:
-            self.attributes[stat] = f[i]
+        for stat in self.physical:
+            self.physical[stat] = f[i]
+            i+=1
+        for stat in self.mental:
+            self.mental[stat] = f[i]
+            i+=1
+        for stat in self.social:
+            self.social[stat] = f[i]
             i+=1
         self.char_calc()
         self.virtue_gen()
@@ -102,22 +114,29 @@ class WoDChar:
 
     def char_calc(self):
         self.traits["Size"] = 5
-        self.traits["Health"] = self.traits["Size"] + self.attributes["Stamina"]
-        self.traits["Willpower"] = self.attributes["Resolve"] + self.attributes["Composure"]
-        self.traits["Defense"] = min(self.attributes["Dexterity"], self.attributes["Wits"])
-        self.traits["Initiative"] = self.attributes["Dexterity"] + self.attributes["Composure"]
-        self.traits["Speed"] = self.attributes["Strength"] + self.attributes["Dexterity"] + 5
+        self.traits["Health"] = self.traits["Size"] + self.physical["Stamina"]
+        self.traits["Willpower"] = self.mental["Resolve"] + self.social["Composure"]
+        self.traits["Defense"] = min(self.physical["Dexterity"], self.mental["Wits"])
+        self.traits["Initiative"] = self.physical["Dexterity"] + self.social["Composure"]
+        self.traits["Speed"] = self.physical["Strength"] + self.physical["Dexterity"] + 5
         self.traits["Morality"] = 7
 
     def print_char(self):
         # @TODO finish printing sheet
         print("Experience " + str(self.experience))
         print("")
-        for att in self.attributes:
-            print(att + " " + str(self.attributes[att]))
+        for att in self.physical:
+            print(att + " " + str(self.physical[att]))
+        print("")
+        for att in self.mental:
+            print(att + " " + str(self.mental[att]))
+        print("")
+        for att in self.social:
+            print(att + " " + str(self.social[att]))
         print("")
         for trait in self.traits:
             print(trait + " " + str(self.traits[trait]))
+        print("")
         for v in self.virtue:
             if self.virtue[v]:
                 print(v)
@@ -126,4 +145,8 @@ class WoDChar:
             if self.vice[v]:
                 print(v)
                 break
-        
+
+    def save_char(self):
+        save = CsvData(self.name + ".csv")
+        save.add_data(self.physical)
+        save.csv_writer()
