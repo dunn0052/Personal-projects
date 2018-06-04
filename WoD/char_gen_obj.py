@@ -4,26 +4,26 @@ import random
 
 
 class wChar:
-    def __init__(self, n = None):
-        
-        self.name = str(n)
+    def __init__(self, name = None):
+
+        self.name = name
 
         self.experience = 0
 
         self.physical = {
-            "Strength" : 0,
-            "Dexterity" : 0,
-            "Stamina" : 0
+            "Strength" : 1,
+            "Dexterity" : 1,
+            "Stamina" : 1
             }
         self.mental = {
-            "Intelligence" : 0,
-            "Wits" : 0,
-            "Resolve" : 0
+            "Intelligence" : 1,
+            "Wits" : 1,
+            "Resolve" : 1
             }
         self.social = {
-            "Presence" : 0,
-            "Manipulation" : 0,
-            "Composure" : 0
+            "Presence" : 1,
+            "Manipulation" : 1,
+            "Composure" : 1
             }
 
         self.virtue = {
@@ -55,52 +55,152 @@ class wChar:
             "Morality" : 0
             }
 
-    def rand_att(self):
-        # one dot per attribute
-        a = [1]*3
-        b = [1]*3
-        c = [1]*3
-        n = []
+        self.mental_skills = {
+            "Academics" : 0,
+            "Computer" : 0,
+            "Crafts" : 0,
+            "Investigation" : 0,
+            "Medicine" : 0,
+            "Occult" : 0,
+            "Politics" : 0,
+            "Science" : 0
+        }
+
+        self.physical_skills = {
+            "Athletics" : 0,
+            "Brawl" : 0,
+            "Drive" : 0,
+            "Firearms" : 0,
+            "Larceny" : 0,
+            "Stealth" : 0,
+            "Survival" : 0,
+            "Weaponry" : 0
+        }
+
+        self.social_skills = {
+            "Animal Ken" : 0,
+            "Empathy" : 0,
+            "Expression" : 0,
+            "Intimidation" : 0,
+            "Persuasion" : 0,
+            "Socialize" : 0,
+            "Streetwise" : 0,
+            "Subterfuge" : 0
+        }
+
+        self.derangements = {
+            "Depression" :  False,
+            "Melancholia" :  False,
+            "Phobia"  :  False,
+            "Hysteria" :  False,
+            "Narcissism" :  False,
+            "Megalomania" :  False,
+            "Fixation" :  False,
+            "Obsessive Compulsion" :  False,
+            "Suspicion" :  False,
+            "Paranoia" :  False,
+            "Inferiority Complex" :  False,
+            "Anxiety" :  False,
+            "Vocalization" :  False,
+            "Schizophrenia" :  False,
+            "Irrationality" :  False,
+            "Multiple Personality" :  False,
+            "Avoidance" :  False,
+            "Fugue" :  False
+        }
+
+        self.mental_merits = {
+            "Common Sense" : 0,
+            "Danger Sense" : 0,
+            "Eidetic Memory" : 0,
+            "Encyclopedic Knowledge" : 0,
+            "Holistic Awareness" : 0,
+            "Language" : 0,
+            "Meditative Mind" : 0,
+            "Unseen Sense" : 0,
+        }
+
+        self.physical_merits = {
+            "Ambidextrous" : 0,
+            "Brawling Dodge" : 0,
+            "Direction Sense" : 0,
+            "Disarm" : 0,
+            "Fast Reflexes" : 0,
+            "Fighting Finesse" : 0,
+            "Fighting Style: Boxing" : 0,
+            "Fighting Style: Kung Fu" : 0,
+            "Fighting Style: Two Weapons" : 0,
+            "Fleet of Foot" : 0,
+            "Fresh Start" : 0,
+            "Giant" : 0,
+            "Gunslinger" : 0,
+            "Iron Stamina" : 0,
+            "Iron Stomach" : 0,
+            "Natural Immunity" : 0,
+            "Quick Draw" : 0,
+            "Quick Healer" : 0,
+            "Strong Back" : 0,
+            "Strong Lungs" : 0,
+            "Stunt Driver" : 0,
+            "Toxin Resistance" : 0,
+            "Weaponry Dodge" : 0,
+        }
+
+        self.social_merits = {
+            "Allies" : 0,
+            "Barfly" : 0,
+            "Contacts" : 0,
+            "Fame" : 0,
+            "Inspiring" : 0,
+            "Mentor" : 0,
+            "Resources" : 0,
+            "Retainer" : 0,
+            "Status" : 0,
+            "Stunning Looks" : 0,
+        }
 
 
-
-        # random values for a[] b[] c[]
-        for i in range (5):
-            n = random.randint(0,2)
-            # decide whether to add the 2 points into a 5th dot
-            if(a[n] == 4 and i == 3 and random.randint(0,1)):
-                a[n] += 1
-                break
-            else:
-                a[n] += 1
-
-        for i in range (4):
-            n = random.randint(0,2)
-            while(b[n] == 4):
-                n = random.randint(0,2)
-            b[n] += 1
-
-        for i in range (3):
-            c[random.randint(0,2)] += 1
-
-        #randomize order of stat values
-        n = [a,b,c]
+    def rand_dot_dist(self, phys, ment, socl, first = 0, second = 0, third = 0):
+        n = [first,second,third]
         random.shuffle(n)
-        f = []
-        for att in n:
-            f.extend(att)
+        self.rand_point_distribute(n[0], phys)
+        self.rand_point_distribute(n[1], ment)
+        self.rand_point_distribute(n[2], socl)
+        
 
-        #probably a better way to iterate, but works for now
+    def rand_point_distribute(self, dots, attributes, max_val = 5):
         i = 0
-        for stat in self.physical:
-            self.physical[stat] = f[i]
-            i+=1
-        for stat in self.mental:
-            self.mental[stat] = f[i]
-            i+=1
-        for stat in self.social:
-            self.social[stat] = f[i]
-            i+=1
+        while (i < dots):
+            choice = random.choice(list(attributes))
+            if(attributes[choice] < max_val):
+                attributes[choice] += 1
+                i+= 1
+            elif(attributes[choice] == max_val - 1 and i == dots - 2):
+                if(random.randint(0,1)):
+                    attributes[choice] +=1
+                    i += 2
+            elif(attributes[choice] == max_val - 1 and i != dots - 1):
+                #bug if every value is max besides this one it will inf loop -- too bad cheaters
+                attributes[choice] += 1
+                i += 2
+
+
+    def rand_merit_dist(self, dots):
+        for i in range(dots):
+            r = random.randint(0,2)
+            if(r == 0):
+                self.rand_point_distribute(1, self.mental_merits)
+            elif(r == 1):
+                self.rand_point_distribute(1, self.physical_merits)
+            else:
+                self.rand_point_distribute(1, self.social_merits)
+
+    def rand_att(self):
+
+        self.rand_dot_dist(self.physical, self.mental, self.social, 5, 4, 3)
+        self.rand_dot_dist(self.physical_skills, self.mental_skills, self.social_skills, 11, 7, 4)
+        self.rand_merit_dist(7)
+
         self.char_calc()
         self.virtue_gen()
         self.vice_gen()
@@ -121,32 +221,44 @@ class wChar:
         self.traits["Speed"] = self.physical["Strength"] + self.physical["Dexterity"] + 5
         self.traits["Morality"] = 7
 
+    def print_attributes(self, attributes, present = False):
+        # present to print attributes even if they have a value of 0
+        if (present):
+            for attribute in attributes:
+                print(attribute + " " + str(attributes[attribute]))
+        else:
+            for attribute in attributes:
+               if attributes[attribute]:
+                   print(attribute + " " + str(attributes[attribute]))
+
     def print_char(self):
         # @TODO finish printing sheet
+        print("Name " + str(self.name))
         print("Experience " + str(self.experience))
         print("")
-        for att in self.physical:
-            print(att + " " + str(self.physical[att]))
-        print("")
-        for att in self.mental:
-            print(att + " " + str(self.mental[att]))
-        print("")
-        for att in self.social:
-            print(att + " " + str(self.social[att]))
-        print("")
-        for trait in self.traits:
-            print(trait + " " + str(self.traits[trait]))
-        print("")
-        for v in self.virtue:
-            if self.virtue[v]:
-                print(v)
-                break
-        for v in self.vice:
-            if self.vice[v]:
-                print(v)
-                break
+        print("Attributes")
+        self.print_attributes(self.physical)
+        self.print_attributes(self.mental)
+        self.print_attributes(self.social)
+        print("Traits")
+        self.print_attributes(self.traits, True)
+        print("Skills")
+        self.print_attributes(self.physical_skills)
+        self.print_attributes(self.mental_skills)
+        self.print_attributes(self.social_skills)
+        print("Merits")
+        self.print_attributes(self.physical_merits)
+        self.print_attributes(self.mental_merits)
+        self.print_attributes(self.social_merits)
+        print("Derangements, virtue, vice")
+        self.print_attributes(self.derangements)
+        self.print_attributes(self.virtue)
+        self.print_attributes(self.vice)
 
     def save_char(self):
+        if (self.name == None):
+            print("The Characer needs a name to save.")
+            return
         path = str(self.name) + ".csv"
         data = []
         data.extend(self.physical.items())
@@ -156,6 +268,7 @@ class wChar:
         with open(path, "w", newline='') as char_file:
             writer = csv.writer(char_file, delimiter=',')
             writer.writerow(("Name", str(self.name)))
+            writer.writerow(("Experience", self.experience))
             for stat in data:
                 writer.writerow(stat)
             for v in self.virtue:
@@ -166,7 +279,7 @@ class wChar:
                 if self.vice[v]:
                     writer.writerow(("Vice", str(v)))
                     break
-        writer.writerow(("Experience", self.experience))
+            
 
     def load_char(self, name):
         #reads data from save file - name must be in quotes
@@ -187,7 +300,7 @@ class wChar:
         self.virtue[data[17][1]] = True
         self.vice[data[18][1]]= True
         self.experience = data[19][1]
-        
+
     def debug(self):
         self.rand_att()
         self.print_char()
