@@ -1,12 +1,12 @@
 #char generator
-from csv_writer import CsvData
+import csv
 import random
 
 
-class char:
-    def __init__(self, name):
+class wChar:
+    def __init__(self, n = None):
         
-        self.name = str(name)
+        self.name = str(n)
 
         self.experience = 0
 
@@ -147,6 +147,48 @@ class char:
                 break
 
     def save_char(self):
-        save = CsvData(self.name + ".csv")
-        save.add_data(self.physical)
-        save.csv_writer()
+        path = str(self.name) + ".csv"
+        data = []
+        data.extend(self.physical.items())
+        data.extend(self.mental.items())
+        data.extend(self.social.items())
+        data.extend(self.traits.items())
+        with open(path, "w", newline='') as char_file:
+            writer = csv.writer(char_file, delimiter=',')
+            writer.writerow(("Name", str(self.name)))
+            for stat in data:
+                writer.writerow(stat)
+            for v in self.virtue:
+                if self.virtue[v]:
+                    writer.writerow(("Virtue", str(v)))
+                    break
+            for v in self.vice:
+                if self.vice[v]:
+                    writer.writerow(("Vice", str(v)))
+                    break
+        writer.writerow(("Experience", self.experience))
+
+    def load_char(self, name):
+        #reads data from save file - name must be in quotes
+        data = []
+        with open(str(name) + ".csv", 'rt') as char_file:
+            reader = csv.reader(char_file, delimiter=',')
+            for row in reader:
+                data.append(row)
+        self.name = data[0][1]
+        for i in range(1,4):
+            self.physical[data[i][0]] = data[i][1]
+        for i in range(4,7):
+            self.mental[data[i][0]] = data[i][1]
+        for i in range(7,10):
+            self.social[data[i][0]] = data[i][1]
+        for i in range(10,17):
+            self.traits[data[i][0]] = data[i][1]
+        self.virtue[data[17][1]] = True
+        self.vice[data[18][1]]= True
+        self.experience = data[19][1]
+        
+    def debug(self):
+        self.rand_att()
+        self.print_char()
+        self.save_char()
