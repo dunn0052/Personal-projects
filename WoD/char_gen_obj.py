@@ -1,4 +1,21 @@
 #char generator
+
+##@TODO
+##
+##- Add save/load features for skills/merits and such
+##- Make an increase function based on experience
+##- Make an increase function for character generation
+##- Make GUI
+##- Dot totals for merits
+##- Add place for skill specialization
+##- Add/change name
+##- Other personal stats - Age/Player/Faction/Description
+##- Increase experience
+##- Add Equipment
+##- Attack dice and modifiers
+##- Skill modifier and roll
+##- Merit modifiers
+
 import csv
 import random
 
@@ -130,7 +147,7 @@ class wChar:
             "Fighting Style: Boxing" : 0,
             "Fighting Style: Kung Fu" : 0,
             "Fighting Style: Two Weapons" : 0,
-            "Fleet of Foot" : 0,
+            "Fleet Of Foot" : 0,
             "Fresh Start" : 0,
             "Giant" : 0,
             "Gunslinger" : 0,
@@ -159,6 +176,35 @@ class wChar:
             "Stunning Looks" : 0,
         }
 
+        self.final_touches = {
+            "Name" : "",
+            "Experience" : 0,
+            "Age" : -1,
+            "Player" : "",
+            "Faction" : "",
+            "Group Name" : "",
+            "Concept" : "",
+            "Group Name" : ""
+        }
+
+    def find_stat(self, key):
+         a = self.find_att(key)
+         if(a != None):
+             return a[(str(key).lower()).title()]
+         else:
+             return None
+
+    def find_att(self,key):
+        clean_key = (str(key).lower()).title()
+        n = [self.physical, self.mental, self.social, self.physical_skills,
+        self.mental_skills, self.social_skills, self.traits,
+        self.physical_merits, self.mental_merits, self.social_merits,
+        self.derangements, self.virtue, self.vice, self.final_touches]
+        for attribute in n:
+            if clean_key in attribute:
+                return attribute
+        print(str(key) + " not found.")
+        return None
 
     def rand_dot_dist(self, phys, ment, socl, first = 0, second = 0, third = 0):
         n = [first,second,third]
@@ -166,7 +212,7 @@ class wChar:
         self.rand_point_distribute(n[0], phys)
         self.rand_point_distribute(n[1], ment)
         self.rand_point_distribute(n[2], socl)
-        
+
 
     def rand_point_distribute(self, dots, attributes, max_val = 5):
         i = 0
@@ -223,34 +269,42 @@ class wChar:
 
     def print_attributes(self, attributes, present = False):
         # present to print attributes even if they have a value of 0
-        if (present):
+        if present:
             for attribute in attributes:
                 print(attribute + " " + str(attributes[attribute]))
         else:
             for attribute in attributes:
-               if attributes[attribute]:
+                if attributes[attribute] or int(attributes[attribute]) > 0:
                    print(attribute + " " + str(attributes[attribute]))
 
     def print_char(self):
         # @TODO finish printing sheet
-        print("Name " + str(self.name))
-        print("Experience " + str(self.experience))
+        self.print_attributes(self.final_touches, True)
         print("")
         print("Attributes")
-        self.print_attributes(self.physical)
-        self.print_attributes(self.mental)
-        self.print_attributes(self.social)
+        print("---------------------------------------------------------------")
+        self.print_attributes(self.physical, True)
+        self.print_attributes(self.mental, True)
+        self.print_attributes(self.social, True)
+        print("")
         print("Traits")
+        print("---------------------------------------------------------------")
         self.print_attributes(self.traits, True)
+        print("")
         print("Skills")
+        print("---------------------------------------------------------------")
         self.print_attributes(self.physical_skills)
         self.print_attributes(self.mental_skills)
         self.print_attributes(self.social_skills)
+        print("")
         print("Merits")
+        print("---------------------------------------------------------------")
         self.print_attributes(self.physical_merits)
         self.print_attributes(self.mental_merits)
         self.print_attributes(self.social_merits)
+        print("")
         print("Derangements, virtue, vice")
+        print("---------------------------------------------------------------")
         self.print_attributes(self.derangements)
         self.print_attributes(self.virtue)
         self.print_attributes(self.vice)
@@ -265,21 +319,26 @@ class wChar:
         data.extend(self.mental.items())
         data.extend(self.social.items())
         data.extend(self.traits.items())
+        data.extend(self.physical_skills.items())
+        data.extend(self.mental_skills.items())
+        data.extend(self.social_skills.items())
+        data.extend(self.physical_merits.items())
+        data.extend(self.mental_merits.items())
+        data.extend(self.social_merits.items())
+        data.extend(self.derangements.items())
         with open(path, "w", newline='') as char_file:
             writer = csv.writer(char_file, delimiter=',')
-            writer.writerow(("Name", str(self.name)))
-            writer.writerow(("Experience", self.experience))
             for stat in data:
                 writer.writerow(stat)
             for v in self.virtue:
                 if self.virtue[v]:
-                    writer.writerow(("Virtue", str(v)))
+                    writer.writerow((str(v), True))
                     break
             for v in self.vice:
                 if self.vice[v]:
-                    writer.writerow(("Vice", str(v)))
+                    writer.writerow((str(v), True))
                     break
-            
+
 
     def load_char(self, name):
         #reads data from save file - name must be in quotes
@@ -288,18 +347,22 @@ class wChar:
             reader = csv.reader(char_file, delimiter=',')
             for row in reader:
                 data.append(row)
-        self.name = data[0][1]
-        for i in range(1,4):
-            self.physical[data[i][0]] = data[i][1]
-        for i in range(4,7):
-            self.mental[data[i][0]] = data[i][1]
-        for i in range(7,10):
-            self.social[data[i][0]] = data[i][1]
-        for i in range(10,17):
-            self.traits[data[i][0]] = data[i][1]
-        self.virtue[data[17][1]] = True
-        self.vice[data[18][1]]= True
-        self.experience = data[19][1]
+##        self.name = data[0][1]
+##        for i in range(1,4):
+##            self.physical[data[i][0]] = data[i][1]
+##        for i in range(4,7):
+##            self.mental[data[i][0]] = data[i][1]
+##        for i in range(7,10):
+##            self.social[data[i][0]] = data[i][1]
+##        for i in range(10,17):
+##            self.traits[data[i][0]] = data[i][1]
+##        self.virtue[data[17][1]] = True
+##        self.vice[data[18][1]]= True
+##        self.experience = data[19][1]
+        for item in data:
+            print(item)
+            self.find_att(item[0])[item[0]] = item[1]
+
 
     def debug(self):
         self.rand_att()
