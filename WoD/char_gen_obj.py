@@ -239,6 +239,9 @@ class wChar:
         self.derangements, self.virtue, self.vice, self.final_touches]
         self.change_name(name)
 
+    def increase_exp(self, num = 1):
+        self.final_touches["Experience"] += num
+
     def increase_stat(self, stat, dot = 1, free = False):
         # free = True if increase doesn't cost exp
         if (stat in self.physical or stat in self.mental or stat in self.social):
@@ -249,12 +252,13 @@ class wChar:
             max_val = 5
         elif(stat in self.physical_merits or stat in self.mental_merits or stat in self.social_merits or stat == self.traits["Morality"]):
             mult = 2
-            max_val = 10 if stat == self.traits["Morality"] else self.find_att(stat)[stat][1]
+            max_val = 10 if stat == self.traits["Morality"] else self.find_att(stat)[stat]
         else:
             print("Stat not found")
             return
-        cost = self.find_stat(stat) * mult
-        if (cost <= self.final_touches["Experience"] or cost <= 25 or free):
+        stat_val = self.find_stat(stat)
+        cost = stat_val * mult
+        if (cost <= self.final_touches["Experience"] and stat_val + dot <= max_val or free and stat_val + dot <= max_val):
              self.find_att(stat)[stat] += dot
              self.final_touches["Experience"] -= cost if not free else 0
         else:
