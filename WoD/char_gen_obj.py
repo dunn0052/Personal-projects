@@ -1,23 +1,23 @@
 #char generator
 
 ##@TODO
-##- Print attribute optionally not print false/0
 ##- Make an increase function based on experience
 ##- Make an increase function for character generation
 ##- Make GUI
 ##- Dot totals for merits
 ##- Add place for skill specialization
-##- Add/change name
-##- Other personal stats - Description
 ##- Increase experience
 ##- Add Equipment
 ##- Attack dice and modifiers
 ##- Skill modifier and roll
 ##- Merit modifiers
-##- rand derangment
 
 import csv
 import random
+from enum import Enum
+class derangement(Enum):
+    Minor = 0
+    Major = 1
 
 
 class wChar:
@@ -105,24 +105,24 @@ class wChar:
 
         self.derangements = {
             "Depression" :  False,
-            "Melancholia" :  False,
             "Phobia"  :  False,
-            "Hysteria" :  False,
             "Narcissism" :  False,
-            "Megalomania" :  False,
             "Fixation" :  False,
-            "Obsessive Compulsion" :  False,
             "Suspicion" :  False,
-            "Paranoia" :  False,
             "Inferiority Complex" :  False,
-            "Anxiety" :  False,
             "Vocalization" :  False,
-            "Schizophrenia" :  False,
             "Irrationality" :  False,
-            "Multiple Personality" :  False,
             "Avoidance" :  False,
+            "Melancholia" :  False,
+            "Hysteria" :  False,
+            "Megalomania" :  False,
+            "Obsessive Compulsion" :  False,
+            "Paranoia" :  False,
+            "Anxiety" :  False,
+            "Schizophrenia" :  False,
+            "Multiple Personality" :  False,
             "Fugue" :  False
-        }
+            }
 
         self.mental_merits = {
             "Common Sense" : 0,
@@ -185,11 +185,12 @@ class wChar:
             "Group Name" : "",
             "Gender" : "",
             "Sex" : ""
+            "Description" : ""
         }
         self.change_name(name)
 
     def change_name(self, name):
-        self.final_touches["name"] = str(name)
+        self.final_touches["Name"] = str(name)
 
     def find_stat(self, key):
          a = self.find_att(key)
@@ -225,7 +226,7 @@ class wChar:
             if(attributes[choice] < max_val - 1):
                 attributes[choice] += 1
                 i+= 1
-            elif(attributes[choice] == max_val - 1 and i < max_val - 1):
+            elif(attributes[choice] == max_val - 1 and i < dots - 1):
                 attributes[choice] += 1
                 i+= 2
 
@@ -244,7 +245,7 @@ class wChar:
         self.rand_dot_dist(self.physical, self.mental, self.social, 5, 4, 3)
         self.rand_dot_dist(self.physical_skills, self.mental_skills, self.social_skills, 11, 7, 4)
         self.rand_merit_dist(7)
-
+        self.rand_der()
         self.char_calc()
         self.virtue_gen()
         self.vice_gen()
@@ -255,6 +256,41 @@ class wChar:
 
     def vice_gen(self):
         self.vice[random.choice(list(self.vice))] = True
+
+    def der_map(self, key):
+        derangements_map = [
+        "Depression" , "Melancholia",
+        "Phobia" , "Hysteria",
+        "Narcissism" , "Megalomania",
+        "Fixation" , "Obsessive Compulsion",
+        "Suspicion" , "Paranoia",
+        "Inferiority Complex" , "Anxiety",
+        "Vocalization" , "Schizophrenia",
+        "Irrationality" , "Multiple Personality",
+        "Avoidance" , "Fugue"]
+
+        place = derangements_map.index(key)
+        return (derangements_map[place-1], derangements_map[place]) if (place % 2 == 1) else (derangements_map[place], derangements_map[place + 1])
+
+
+
+
+
+    def rand_der(self, n = 3):
+        chance = random.randint(0,n)
+        print(chance)
+        for i in range(chance):
+            pair = self.der_map(random.choice(list(self.derangements)))
+            # if no derangment is present then make mild choice
+            if not self.derangements[pair[0]] and not self.derangements[pair[1]]:
+                self.derangements[pair[0]] = True
+            # if mild derangment is present then upgrade to major
+            elif self.derangements[pair[0]]:
+                self.derangements[pair[0]] = False
+                self.derangements[pair[1]] = True
+            # if already major, then ignore
+
+
 
     def char_calc(self):
         self.traits["Size"] = 5
@@ -310,15 +346,29 @@ class wChar:
         self.print_attributes(self.virtue)
         self.print_attributes(self.vice)
 
-    def bool_write(self, attribute, writer, val = True):
+    def type_write(self, attribute, writer):
         for stat in attribute:
-            if attribute[stat]:
-                writer.writerow((str(stat), val))
-                break
-            
+            if isinstance(attribute[stat], bool) and attribute[stat]:
+                writer.writerow((str(stat), True))
+            elif isinstance(attribute[stat], int):
+                writer.writerow((str(stat), int(attribute[stat])))
+            else:
+                writer.writerow((str(stat), attribute[stat]))
+
+    def type_read(self, item):
+        print(item)
+        if item[1] == "True":
+            self.find_att(item[0])[item[0]] = True
+        elif item[1] == "False":
+            self.find_att(item[0])[item[0]] = False
+        elif item[1].isnumeric():
+            self.find_att(item[0])[item[0]] = int(item[1])
+        else:
+            self.find_att(item[0])[item[0]] = item[1]
+
 
     def save_char(self):
-        if (self.final_touches["Name"] == None):
+        if (self.final_touches["Name"]== None):
             print("The Characer needs a name to save. Use change_name().")
             return
         path = str(self.final_touches["Name"]) + ".csv"
@@ -337,10 +387,10 @@ class wChar:
             writer = csv.writer(char_file, delimiter=',')
             for stat in data:
                 writer.writerow(stat)
-            self.bool_write(self.vice, writer)
-            self.bool_write(self.virtue, writer)
-            self.bool_write(self.derangements, writer)
-            
+            self.type_write(self.vice, writer)
+            self.type_write(self.virtue, writer)
+            self.type_write(self.derangements, writer)
+
 
     def load_char(self, name):
         #reads data from save file - name must be in quotes
@@ -350,8 +400,7 @@ class wChar:
             for row in reader:
                 data.append(row)
         for item in data:
-            print(item)
-            self.find_att(item[0])[item[0]] = (int(item[1]) if item[1].isnumeric() else item[1])
+            self.type_read(item)
 
 
     def debug(self):

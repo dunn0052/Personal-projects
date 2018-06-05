@@ -1,20 +1,113 @@
-Name,test
-Experience,0
-Strength,2
-Dexterity,3
-Stamina,3
+Dexterity,2
+Strength,4
+Stamina,1
 Resolve,2
-Intelligence,3
-Wits,2
-Composure,3
-Presence,1
-Manipulation,2
-Willpower,5
-Initiative,6
-Defense,2
-Morality,7
-Speed,10
+Wits,4
+Intelligence,2
+Composure,1
+Presence,2
+Manipulation,3
 Size,5
-Health,8
-Virtue,Justice
-Vice,Pride
+Willpower,3
+Initiative,3
+Speed,11
+Morality,7
+Defense,2
+Health,6
+Drive,2
+Larceny,1
+Weaponry,1
+Athletics,2
+Stealth,2
+Survival,0
+Firearms,2
+Brawl,1
+Computer,2
+Science,1
+Crafts,0
+Investigation,1
+Politics,1
+Occult,1
+Medicine,1
+Academics,0
+Persuasion,0
+Socialize,0
+Animal Ken,0
+Subterfuge,2
+Empathy,2
+Intimidation,0
+Streetwise,0
+Expression,0
+Quick Draw,0
+Fleet Of Foot,0
+Weaponry Dodge,0
+Ambidextrous,0
+Toxin Resistance,0
+Iron Stomach,0
+Giant,0
+Strong Back,0
+Fighting Style: Two Weapons,0
+Fresh Start,0
+Strong Lungs,0
+Brawling Dodge,1
+Quick Healer,0
+Fighting Finesse,0
+Fast Reflexes,0
+Natural Immunity,0
+Gunslinger,0
+Fighting Style: Boxing,0
+Direction Sense,0
+Fighting Style: Kung Fu,0
+Disarm,0
+Stunt Driver,0
+Iron Stamina,0
+Danger Sense,0
+Common Sense,0
+Unseen Sense,0
+Language,1
+Encyclopedic Knowledge,0
+Holistic Awareness,0
+Meditative Mind,1
+Eidetic Memory,0
+Status,0
+Contacts,0
+Barfly,0
+Allies,1
+Resources,1
+Mentor,0
+Fame,0
+Retainer,0
+Inspiring,1
+Stunning Looks,1
+Gluttony,0
+Pride,0
+Lust,0
+Sloth,0
+Envy,0
+Greed,True
+Wraith,0
+Charity,True
+Hope,0
+Faith,0
+Temperance,0
+Justice,0
+Prudence,0
+Fortitude,0
+Fugue,0
+Hysteria,0
+Obsessive Compulsion,0
+Irrationality,0
+Schizophrenia,0
+Fixation,0
+Multiple Personality,0
+Depression,0
+Melancholia,0
+Avoidance,0
+Paranoia,0
+Vocalization,True
+Megalomania,0
+Inferiority Complex,0
+Anxiety,0
+Suspicion,0
+Phobia,0
+Narcissism,0
