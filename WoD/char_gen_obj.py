@@ -69,7 +69,7 @@ class wChar:
             "Initiative" : 0,
             "Morality" : 0
             }
-
+        # name : [current value, type, specialties, effect]
         self.mental_skills = {
             "Academics" : 0,
             "Computer" : 0,
@@ -171,7 +171,7 @@ class wChar:
             "Resources" : 0,
             "Retainer" : 0,
             "Status" : 0,
-            "Stunning Looks" : 0,
+            "Striking Looks" : 0,
         }
 
         self.final_touches = {
@@ -184,10 +184,82 @@ class wChar:
             "Concept" : "",
             "Group Name" : "",
             "Gender" : "",
-            "Sex" : ""
+            "Sex" : "",
             "Description" : ""
         }
+
+        # name : [current value, max value, type, effect, desciption]
+        self.merit_max = {
+            "Allies" : 5,
+            "Barfly" : 1,
+            "Contacts" : 5,
+            "Fame" : 3,
+            "Inspiring" : 4,
+            "Mentor" : 5,
+            "Resources" : 5,
+            "Retainer" : 5,
+            "Status" : 5,
+            "Stiking Looks" : 4,
+            "Ambidextrous" : 3,
+            "Brawling Dodge" : 1,
+            "Direction Sense" : 1,
+            "Disarm" : 2,
+            "Fast Reflexes" : 2,
+            "Fighting Finesse" : 2,
+            "Fighting Style: Boxing" : 5,
+            "Fighting Style: Kung Fu" : 5,
+            "Fighting Style: Two Weapons" : 4,
+            "Fleet Of Foot" : 3,
+            "Fresh Start" : 1,
+            "Giant" : 4,
+            "Gunslinger" : 3,
+            "Iron Stamina" : 3,
+            "Iron Stomach" : 2,
+            "Natural Immunity" : 1,
+            "Quick Draw" : 1,
+            "Quick Healer" : 4,
+            "Strong Back" : 1,
+            "Strong Lungs" : 3,
+            "Stunt Driver" : 3,
+            "Toxin Resistance" : 2,
+            "Weaponry Dodge" : 1,
+            "Common Sense" : 4,
+            "Danger Sense" : 2,
+            "Eidetic Memory" : 2,
+            "Encyclopedic Knowledge" : 4,
+            "Holistic Awareness" : 3,
+            "Language" : 4,
+            "Meditative Mind" : 1,
+            "Unseen Sense" : 3,
+        }
+
+        self.search_list = [self.physical, self.mental, self.social, self.physical_skills,
+        self.mental_skills, self.social_skills, self.traits,
+        self.physical_merits, self.mental_merits, self.social_merits,
+        self.derangements, self.virtue, self.vice, self.final_touches]
         self.change_name(name)
+
+    def increase_stat(self, stat, dot = 1, free = False):
+        # free = True if increase doesn't cost exp
+        if (stat in self.physical or stat in self.mental or stat in self.social):
+            mult = 5
+            max_val = 5
+        elif(stat in self.physical_skills or stat in self.mental_skills or stat in self.social_skills):
+            mult = 3
+            max_val = 5
+        elif(stat in self.physical_merits or stat in self.mental_merits or stat in self.social_merits or stat == self.traits["Morality"]):
+            mult = 2
+            max_val = 10 if stat == self.traits["Morality"] else self.find_att(stat)[stat][1]
+        else:
+            print("Stat not found")
+            return
+        cost = self.find_stat(stat) * mult
+        if (cost <= self.final_touches["Experience"] or cost <= 25 or free):
+             self.find_att(stat)[stat] += dot
+             self.final_touches["Experience"] -= cost if not free else 0
+        else:
+             print("Can't increase " + str(stat))
+
 
     def change_name(self, name):
         self.final_touches["Name"] = str(name)
@@ -201,11 +273,7 @@ class wChar:
 
     def find_att(self,key):
         clean_key = (str(key).lower()).title()
-        n = [self.physical, self.mental, self.social, self.physical_skills,
-        self.mental_skills, self.social_skills, self.traits,
-        self.physical_merits, self.mental_merits, self.social_merits,
-        self.derangements, self.virtue, self.vice, self.final_touches]
-        for attribute in n:
+        for attribute in self.search_list:
             if clean_key in attribute:
                 return attribute
         print(str(key) + " not found.")

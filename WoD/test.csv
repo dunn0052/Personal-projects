@@ -1,113 +1,113 @@
+Stamina,2
+Strength,2
 Dexterity,2
-Strength,4
-Stamina,1
+Intelligence,3
+Wits,2
 Resolve,2
-Wits,4
-Intelligence,2
-Composure,1
-Presence,2
 Manipulation,3
-Size,5
-Willpower,3
+Presence,4
+Composure,1
 Initiative,3
-Speed,11
-Morality,7
 Defense,2
-Health,6
-Drive,2
-Larceny,1
-Weaponry,1
-Athletics,2
-Stealth,2
+Morality,7
+Health,7
+Speed,9
+Willpower,3
+Size,5
 Survival,0
-Firearms,2
 Brawl,1
-Computer,2
-Science,1
-Crafts,0
+Larceny,1
+Firearms,2
+Drive,0
+Athletics,1
+Stealth,4
+Weaponry,2
+Computer,0
+Science,0
+Crafts,2
+Occult,0
 Investigation,1
-Politics,1
-Occult,1
 Medicine,1
+Politics,0
 Academics,0
-Persuasion,0
-Socialize,0
-Animal Ken,0
-Subterfuge,2
-Empathy,2
-Intimidation,0
-Streetwise,0
 Expression,0
-Quick Draw,0
-Fleet Of Foot,0
-Weaponry Dodge,0
-Ambidextrous,0
-Toxin Resistance,0
+Animal Ken,1
+Persuasion,1
+Socialize,1
+Empathy,1
+Streetwise,3
+Subterfuge,0
+Intimidation,0
 Iron Stomach,0
-Giant,0
-Strong Back,0
-Fighting Style: Two Weapons,0
-Fresh Start,0
-Strong Lungs,0
-Brawling Dodge,1
-Quick Healer,0
-Fighting Finesse,0
-Fast Reflexes,0
-Natural Immunity,0
 Gunslinger,0
+Disarm,1
+Quick Draw,0
+Fighting Style: Two Weapons,0
+Toxin Resistance,0
+Brawling Dodge,0
+Natural Immunity,0
+Fleet Of Foot,0
+Fresh Start,1
+Strong Back,0
+Fighting Finesse,0
+Stunt Driver,0
+Ambidextrous,0
+Giant,0
+Iron Stamina,0
+Fast Reflexes,0
+Quick Healer,0
 Fighting Style: Boxing,0
+Weaponry Dodge,0
 Direction Sense,0
 Fighting Style: Kung Fu,0
-Disarm,0
-Stunt Driver,0
-Iron Stamina,0
-Danger Sense,0
-Common Sense,0
+Strong Lungs,0
+Eidetic Memory,1
 Unseen Sense,0
-Language,1
+Language,0
+Meditative Mind,0
+Common Sense,0
 Encyclopedic Knowledge,0
+Danger Sense,0
 Holistic Awareness,0
-Meditative Mind,1
-Eidetic Memory,0
-Status,0
-Contacts,0
-Barfly,0
-Allies,1
-Resources,1
-Mentor,0
+Barfly,1
 Fame,0
+Allies,0
+Mentor,1
+Status,1
+Striking Looks,0
+Resources,0
+Contacts,1
 Retainer,0
-Inspiring,1
-Stunning Looks,1
+Inspiring,0
 Gluttony,0
-Pride,0
 Lust,0
+Greed,0
 Sloth,0
-Envy,0
-Greed,True
 Wraith,0
-Charity,True
+Pride,0
+Envy,True
+Justice,0
+Charity,0
 Hope,0
+Prudence,0
 Faith,0
 Temperance,0
-Justice,0
-Prudence,0
-Fortitude,0
-Fugue,0
-Hysteria,0
-Obsessive Compulsion,0
-Irrationality,0
-Schizophrenia,0
-Fixation,0
-Multiple Personality,0
-Depression,0
-Melancholia,0
-Avoidance,0
-Paranoia,0
-Vocalization,True
-Megalomania,0
-Inferiority Complex,0
+Fortitude,True
 Anxiety,0
-Suspicion,0
+Melancholia,0
+Depression,True
+Fixation,0
 Phobia,0
+Schizophrenia,0
 Narcissism,0
+Obsessive Compulsion,0
+Fugue,0
+Megalomania,0
+Multiple Personality,0
+Irrationality,True
+Vocalization,0
+Hysteria,0
+Avoidance,True
+Suspicion,0
+Paranoia,0
+Inferiority Complex,0
