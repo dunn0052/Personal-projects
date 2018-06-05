@@ -1,6 +1,6 @@
 #char generator
 
-##@TODO
+## @TODO
 ##- Make an increase function based on experience
 ##- Make an increase function for character generation
 ##- Make GUI
@@ -24,7 +24,7 @@ class wChar:
     def __init__(self, name = None):
 
         # All attributes must begin every word with capital for search to work
-
+        # name : [current value, max value, type, attribute (phys ment soc), description]
         self.physical = {
             "Strength" : 1,
             "Dexterity" : 1,
@@ -188,49 +188,49 @@ class wChar:
             "Description" : ""
         }
 
-        # name : [current value, max value, type, effect, desciption]
+        # name : [current value, max value, min value, prerequisite, prerequisite value, attribute, type, effect, desciption]
         self.merit_max = {
-            "Allies" : 5,
-            "Barfly" : 1,
-            "Contacts" : 5,
-            "Fame" : 3,
-            "Inspiring" : 4,
-            "Mentor" : 5,
-            "Resources" : 5,
-            "Retainer" : 5,
-            "Status" : 5,
-            "Stiking Looks" : 4,
-            "Ambidextrous" : 3,
-            "Brawling Dodge" : 1,
-            "Direction Sense" : 1,
-            "Disarm" : 2,
-            "Fast Reflexes" : 2,
-            "Fighting Finesse" : 2,
-            "Fighting Style: Boxing" : 5,
-            "Fighting Style: Kung Fu" : 5,
-            "Fighting Style: Two Weapons" : 4,
-            "Fleet Of Foot" : 3,
-            "Fresh Start" : 1,
-            "Giant" : 4,
-            "Gunslinger" : 3,
-            "Iron Stamina" : 3,
-            "Iron Stomach" : 2,
-            "Natural Immunity" : 1,
-            "Quick Draw" : 1,
-            "Quick Healer" : 4,
-            "Strong Back" : 1,
-            "Strong Lungs" : 3,
-            "Stunt Driver" : 3,
-            "Toxin Resistance" : 2,
-            "Weaponry Dodge" : 1,
-            "Common Sense" : 4,
-            "Danger Sense" : 2,
-            "Eidetic Memory" : 2,
-            "Encyclopedic Knowledge" : 4,
-            "Holistic Awareness" : 3,
-            "Language" : 4,
-            "Meditative Mind" : 1,
-            "Unseen Sense" : 3,
+            "Allies" : [0, 5, "Social", "Merit", ""],
+            "Barfly" : [0, 1,"Social", "Merit", ""],
+            "Contacts" : [0, 5,"Social", "Merit", ""],
+            "Fame" : [0, 3,"Social", "Merit", ""],
+            "Inspiring" : [0, 4, "Social", "Merit", ""],
+            "Mentor" : [0, 5, "Social", "Merit", ""],
+            "Resources" : [0, 5, "Social", "Merit", ""],
+            "Retainer" : [0, 5, "Social", "Merit", ""],
+            "Status" : [0, 5, "Social", "Merit", ""],
+            "Stiking Looks" : [0, 4, "Social", "Merit", ""],
+            "Ambidextrous" : [0, 3, "Physical", "Merit", ""],
+            "Brawling Dodge" : [0, 1, "Physical", "Merit", ""],
+            "Direction Sense" : [0, 1, "Physical", "Merit", ""],
+            "Disarm" : [0, 2, "Physical", "Merit", ""],
+            "Fast Reflexes" : [0, 2, "Physical", "Merit", ""],
+            "Fighting Finesse" : [0, 2, "Physical", "Merit", ""],
+            "Fighting Style: Boxing" : [0, 5, "Physical", "Merit", ""],
+            "Fighting Style: Kung Fu" : [0, 5, "Physical", "Merit", ""],
+            "Fighting Style: Two Weapons" : [0, 4, "Physical", "Merit", ""],
+            "Fleet Of Foot" : [0, 3, "Physical", "Merit", ""],
+            "Fresh Start" : [0, 1, "Physical", "Merit", ""],
+            "Giant" : [0, 4, "Physical", "Merit", ""],
+            "Gunslinger" : [0, 3, "Physical", "Merit", ""],
+            "Iron Stamina" : [0, 3, "Physical", "Merit", ""],
+            "Iron Stomach" : [0, 2, "Physical", "Merit", ""],
+            "Natural Immunity" : [0, 1, "Physical", "Merit", ""],
+            "Quick Draw" : [0, 1, "Physical", "Merit", ""],
+            "Quick Healer" : [0, 4, "Physical", "Merit", ""],
+            "Strong Back" : [0, 1, "Physical", "Merit", ""],
+            "Strong Lungs" : [0, 3, "Physical", "Merit", ""],
+            "Stunt Driver" : [0, 3, "Physical", "Merit", ""],
+            "Toxin Resistance" : [0, 2, "Physical", "Merit", ""],
+            "Weaponry Dodge" : [0, 1, "Physical", "Merit", ""],
+            "Common Sense" : [0, 4, "Mental", "Merit", ""],
+            "Danger Sense" : [0, 2, "Mental", "Merit", ""],
+            "Eidetic Memory" : [0, 2, "Mental", "Merit", ""],
+            "Encyclopedic Knowledge" : [0, 4, "Mental", "Merit", ""],
+            "Holistic Awareness" : [0, 3, "Mental", "Merit", ""],
+            "Language" : [0, 4, "Mental", "Merit", ""],
+            "Meditative Mind" : [0, 1, "Mental", "Merit", ""],
+            "Unseen Sense" : [0, 3, "Mental", "Merit", ""]
         }
 
         self.search_list = [self.physical, self.mental, self.social, self.physical_skills,
@@ -249,16 +249,17 @@ class wChar:
             max_val = 5
         elif(stat in self.physical_merits or stat in self.mental_merits or stat in self.social_merits or stat == self.traits["Morality"]):
             mult = 2
-            max_val = 10 if stat == self.traits["Morality"] else self.find_att(stat)[stat][1]
+            max_val = 10 if stat == "Morality" else self.merit_max[stat][1]
         else:
             print("Stat not found")
             return
-        cost = self.find_stat(stat) * mult
-        if (cost <= self.final_touches["Experience"] or cost <= 25 or free):
+        stat_val = self.find_stat(stat)
+        cost = stat_val * mult
+        if (cost <= self.final_touches["Experience"] and stat_val + dot < max_val or free and stat_val + dot < max_val):
              self.find_att(stat)[stat] += dot
              self.final_touches["Experience"] -= cost if not free else 0
         else:
-             print("Can't increase " + str(stat))
+             print("Can't increase " + str(stat) +".")
 
 
     def change_name(self, name):
@@ -420,6 +421,8 @@ class wChar:
                 writer.writerow((str(stat), True))
             elif isinstance(attribute[stat], int):
                 writer.writerow((str(stat), int(attribute[stat])))
+            elif isinstance(attribute[stat], list):
+                writer.writerow((str(stat), int(attribute[stat][0])))
             else:
                 writer.writerow((str(stat), attribute[stat]))
 
