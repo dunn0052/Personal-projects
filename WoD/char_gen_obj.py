@@ -1,20 +1,20 @@
 #char generator
 
 ##@TODO
-##
-##- Add save/load features for skills/merits and such
+##- Print attribute optionally not print false/0
 ##- Make an increase function based on experience
 ##- Make an increase function for character generation
 ##- Make GUI
 ##- Dot totals for merits
 ##- Add place for skill specialization
 ##- Add/change name
-##- Other personal stats - Age/Player/Faction/Description
+##- Other personal stats - Description
 ##- Increase experience
 ##- Add Equipment
 ##- Attack dice and modifiers
 ##- Skill modifier and roll
 ##- Merit modifiers
+##- rand derangment
 
 import csv
 import random
@@ -23,9 +23,7 @@ import random
 class wChar:
     def __init__(self, name = None):
 
-        self.name = name
-
-        self.experience = 0
+        # All attributes must begin every word with capital for search to work
 
         self.physical = {
             "Strength" : 1,
@@ -184,8 +182,14 @@ class wChar:
             "Faction" : "",
             "Group Name" : "",
             "Concept" : "",
-            "Group Name" : ""
+            "Group Name" : "",
+            "Gender" : "",
+            "Sex" : ""
         }
+        self.change_name(name)
+
+    def change_name(self, name):
+        self.final_touches["name"] = str(name)
 
     def find_stat(self, key):
          a = self.find_att(key)
@@ -218,18 +222,12 @@ class wChar:
         i = 0
         while (i < dots):
             choice = random.choice(list(attributes))
-            if(attributes[choice] < max_val):
+            if(attributes[choice] < max_val - 1):
                 attributes[choice] += 1
                 i+= 1
-            elif(attributes[choice] == max_val - 1 and i == dots - 2):
-                if(random.randint(0,1)):
-                    attributes[choice] +=1
-                    i += 2
-            elif(attributes[choice] == max_val - 1 and i != dots - 1):
-                #bug if every value is max besides this one it will inf loop -- too bad cheaters
+            elif(attributes[choice] == max_val - 1 and i < max_val - 1):
                 attributes[choice] += 1
-                i += 2
-
+                i+= 2
 
     def rand_merit_dist(self, dots):
         for i in range(dots):
@@ -274,7 +272,7 @@ class wChar:
                 print(attribute + " " + str(attributes[attribute]))
         else:
             for attribute in attributes:
-                if attributes[attribute] or int(attributes[attribute]) > 0:
+                if (attributes[attribute] != 0):
                    print(attribute + " " + str(attributes[attribute]))
 
     def print_char(self):
@@ -303,17 +301,27 @@ class wChar:
         self.print_attributes(self.mental_merits)
         self.print_attributes(self.social_merits)
         print("")
-        print("Derangements, virtue, vice")
+        print("Derangements")
         print("---------------------------------------------------------------")
         self.print_attributes(self.derangements)
+        print("")
+        print("Virtue and Vice")
+        print("---------------------------------------------------------------")
         self.print_attributes(self.virtue)
         self.print_attributes(self.vice)
 
+    def bool_write(self, attribute, writer, val = True):
+        for stat in attribute:
+            if attribute[stat]:
+                writer.writerow((str(stat), val))
+                break
+            
+
     def save_char(self):
-        if (self.name == None):
-            print("The Characer needs a name to save.")
+        if (self.final_touches["Name"] == None):
+            print("The Characer needs a name to save. Use change_name().")
             return
-        path = str(self.name) + ".csv"
+        path = str(self.final_touches["Name"]) + ".csv"
         data = []
         data.extend(self.physical.items())
         data.extend(self.mental.items())
@@ -325,20 +333,14 @@ class wChar:
         data.extend(self.physical_merits.items())
         data.extend(self.mental_merits.items())
         data.extend(self.social_merits.items())
-        data.extend(self.derangements.items())
         with open(path, "w", newline='') as char_file:
             writer = csv.writer(char_file, delimiter=',')
             for stat in data:
                 writer.writerow(stat)
-            for v in self.virtue:
-                if self.virtue[v]:
-                    writer.writerow((str(v), True))
-                    break
-            for v in self.vice:
-                if self.vice[v]:
-                    writer.writerow((str(v), True))
-                    break
-
+            self.bool_write(self.vice, writer)
+            self.bool_write(self.virtue, writer)
+            self.bool_write(self.derangements, writer)
+            
 
     def load_char(self, name):
         #reads data from save file - name must be in quotes
@@ -347,21 +349,9 @@ class wChar:
             reader = csv.reader(char_file, delimiter=',')
             for row in reader:
                 data.append(row)
-##        self.name = data[0][1]
-##        for i in range(1,4):
-##            self.physical[data[i][0]] = data[i][1]
-##        for i in range(4,7):
-##            self.mental[data[i][0]] = data[i][1]
-##        for i in range(7,10):
-##            self.social[data[i][0]] = data[i][1]
-##        for i in range(10,17):
-##            self.traits[data[i][0]] = data[i][1]
-##        self.virtue[data[17][1]] = True
-##        self.vice[data[18][1]]= True
-##        self.experience = data[19][1]
         for item in data:
             print(item)
-            self.find_att(item[0])[item[0]] = item[1]
+            self.find_att(item[0])[item[0]] = (int(item[1]) if item[1].isnumeric() else item[1])
 
 
     def debug(self):
