@@ -2,8 +2,7 @@
 
 ##@TODO
 ##- Make GUI
-##- Dot totals for merits
-##- Add place for skill specialization
+##- Push character data to external module
 ##- Add Equipment
 ##- Attack dice and modifiers
 ##- Skill modifier and roll
@@ -11,11 +10,6 @@
 
 import csv
 import random
-from enum import Enum
-class derangement(Enum):
-    Minor = 0
-    Major = 1
-
 
 class wChar:
     def __init__(self, name = None):
@@ -230,12 +224,47 @@ class wChar:
             "Unseen Sense" : 3,
         }
 
+        self.skill_specialization = {
+
+        }
+
+        self.weapons = {
+
+        }
+
+        self.inventory = {
+
+        }
+
         self.search_list = [self.physical, self.mental, self.social, self.physical_skills,
         self.mental_skills, self.social_skills, self.traits,
         self.physical_merits, self.mental_merits, self.social_merits,
         self.derangements, self.virtue, self.vice, self.final_touches]
 
         self.change_name(name)
+
+    def add_skill_specialization(self, skill, specialization):
+        exp = self.final_touches["Experience"]
+        if(exp >= 3 and (skill in self.physical_skills or skill in self.social_skills or skill in self.mental_skills)):
+            exp -= 3
+            if (skill not in self.skill_specialization):
+                self.skill_specialization[skill] = [specialization]
+            else:
+                self.skill_specialization[skill].append(specialization)
+        else:
+            print("Could not add " + specialization + " to " + skill)
+
+    def add_weapon(self, name, list = "Weapons"):
+        #reads data from weapon list - could be made generic
+        data = []
+        with open(list + ".csv", 'rt') as weapon_file:
+            reader = csv.reader(weapon_file, delimiter=',')
+            for row in reader:
+                if row[0] == name:
+                    self.weapons[row[0]] = row[1]
+                    print("Added " + row[0] + " to weapons.")
+                    break
+
 
     def increase_exp(self, num = 1):
         self.final_touches["Experience"] += num
