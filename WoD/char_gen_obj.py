@@ -1,12 +1,9 @@
 #char generator
 
 ##@TODO
-##- Make an increase function based on experience
-##- Make an increase function for character generation
 ##- Make GUI
 ##- Dot totals for merits
 ##- Add place for skill specialization
-##- Increase experience
 ##- Add Equipment
 ##- Attack dice and modifiers
 ##- Skill modifier and roll
@@ -237,13 +234,14 @@ class wChar:
         self.mental_skills, self.social_skills, self.traits,
         self.physical_merits, self.mental_merits, self.social_merits,
         self.derangements, self.virtue, self.vice, self.final_touches]
+
         self.change_name(name)
 
     def increase_exp(self, num = 1):
         self.final_touches["Experience"] += num
 
-    def increase_stat(self, stat, dot = 1, free = False):
-        # free = True if increase doesn't cost exp
+    def increase_stat(self, stat, dot = 1, free = False, override = False):
+        # free = True if increase doesn't cost exp - override for GM override
         if (stat in self.physical or stat in self.mental or stat in self.social):
             mult = 5
             max_val = 5
@@ -258,7 +256,7 @@ class wChar:
             return
         stat_val = self.find_stat(stat)
         cost = stat_val * mult
-        if (cost <= self.final_touches["Experience"] and stat_val + dot <= max_val or free and stat_val + dot <= max_val):
+        if (cost <= self.final_touches["Experience"] and stat_val + dot <= max_val or free and stat_val + dot <= max_val or override):
              self.find_att(stat)[stat] += dot
              self.final_touches["Experience"] -= cost if not free else 0
         else:
@@ -473,6 +471,31 @@ class wChar:
                 data.append(row)
         for item in data:
             self.type_read(item)
+
+    def roll(self, attribute, skill = 0, items = 0, modifier = 0, again = 10, min = 8):
+        # again is min success value - used when
+        dice_pool = attribute + skill + items + modifier
+        success = 0
+        if dice_pool > 0:
+            dice = 0
+            while dice < dice_pool:
+                print(dice)
+                die = random.randint(0,10)
+                if die >= min:
+                    success += 1
+                if die == again:
+                    dice -= 1
+                    print("again")
+                dice += 1
+            return success
+        elif dice_pool < 1:
+            die = random.randint(1,10)
+            if die != 10 and roll != 0:
+                return 0
+            elif die == 10:
+                return 1
+            else:
+                return 0
 
 
     def debug(self):
