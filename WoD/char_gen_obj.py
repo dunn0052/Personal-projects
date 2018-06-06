@@ -241,6 +241,11 @@ class wChar:
         self.physical_merits, self.mental_merits, self.social_merits,
         self.derangements, self.virtue, self.vice, self.final_touches]
 
+        self.search_list_text = ["self.physical", "self.mental", "self.social", "self.physical_skills",
+        "self.mental_skills", "self.social_skills", "self.traits",
+        "self.physical_merits", "self.mental_merits", "self.social_merits",
+        "self.derangements", "self.virtue", "self.vice", "self.final_touches"]
+
         self.change_name(name)
 
     def add_skill_specialization(self, skill, specialization):
@@ -254,16 +259,37 @@ class wChar:
         else:
             print("Could not add " + specialization + " to " + skill)
 
-    def add_weapon(self, name, list = "Weapons"):
+    def add_weapon(self, name, list = "weapons"):
         #reads data from weapon list - could be made generic
         data = []
         with open(list + ".csv", 'rt') as weapon_file:
             reader = csv.reader(weapon_file, delimiter=',')
             for row in reader:
                 if row[0] == name:
-                    self.weapons[row[0]] = row[1]
+                    self.weapons[row[0]] = row[1:]
                     print("Added " + row[0] + " to weapons.")
                     break
+
+    def write_data(self, path, dict):
+        # export char data to csv file for modifcation
+        data = []
+        data.extend(dict.items())
+        with open(path + ".csv", "w", newline='') as data_file:
+            writer = csv.writer(data_file, delimiter=',')
+            for stat in data:
+                writer.writerow(stat)
+        data_file.close()
+
+    def write_all_data(self):
+        paths = []
+        for name in self.search_list_text:
+            f = str(name)
+            a = f.split('.')[-1]
+            paths.append(a)
+        i = 0
+        for dictionary in self.search_list:
+            self.write_data(paths[i], dictionary)
+            i += 1
 
 
     def increase_exp(self, num = 1):
