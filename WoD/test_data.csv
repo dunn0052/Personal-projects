@@ -1,0 +1,108 @@
+Name,Current,Type,Attribute
+Fighting Finesse,0,Merit,Physical,2
+Fresh Start,0,Merit,Physical,1
+Strong Lungs,0,Merit,Physical,3
+Fighting Style: Boxing,0,Merit,Physical,5
+Stunt Driver,0,Merit,Physical,3
+Disarm,0,Merit,Physical,2
+Quick Draw,0,Merit,Physical,1
+Iron Stomach,0,Merit,Physical,2
+Quick Healer,0,Merit,Physical,4
+Fighting Style: Two Weapons,0,Merit,Physical,4
+Ambidextrous,0,Merit,Physical,3
+Natural Immunity,0,Merit,Physical,1
+Weaponry Dodge,0,Merit,Physical,1
+Fleet Of Foot,0,Merit,Physical,3
+Brawling Dodge,0,Merit,Physical,1
+Gunslinger,0,Merit,Physical,3
+Fast Reflexes,0,Merit,Physical,2
+Fighting Style: Kung Fu,0,Merit,Physical,5
+Toxin Resistance,0,Merit,Physical,2
+Iron Stamina,0,Merit,Physical,3
+Direction Sense,0,Merit,Physical,1
+Giant,0,Merit,Physical,4
+Strong Back,0,Merit,Physical,1
+Survival,0,Skill,Physical,5
+Larceny,0,Skill,Physical,5
+Stealth,0,Skill,Physical,5
+Brawl,0,Skill,Physical,5
+Weaponry,0,Skill,Physical,5
+Drive,0,Skill,Physical,5
+Athletics,0,Skill,Physical,5
+Firearms,0,Skill,Physical,5
+Encyclopedic Knowledge,0,Merit,Mental,4
+Eidetic Memory,0,Merit,Mental,2
+Meditative Mind,0,Merit,Mental,1
+Danger Sense,0,Merit,Mental,2
+Holistic Awareness,0,Merit,Mental,3
+Language,0,Merit,Mental,4
+Unseen Sense,0,Merit,Mental,3
+Common Sense,0,Merit,Mental,4
+Resolve,1,Attribute,Mental,5
+Intelligence,1,Attribute,Mental,5
+Wits,1,Attribute,Mental,5
+Narcissism,FALSE,Derangement,,Megalomania,FALSE
+Phobia,FALSE,Derangement,,Hysteria,FALSE
+Suspicion,FALSE,Derangement,,Paranoia,FALSE
+Inferiority Complex,FALSE,Derangement,,Anxiety,FALSE
+Irrationality,FALSE,Derangement,,Multiple Personality,FALSE
+Avoidance,FALSE,Derangement,,Fugue,FALSE
+Fixation,FALSE,Derangement,,Obsessive Compulsion,FALSE
+Vocalization,FALSE,Derangement,,Schizophrenia,FALSE
+Depression,FALSE,Derangement,,Melancholia,FALSE
+Dexterity,1,Attribute,Physical,5
+Strength,1,Attribute,Physical,5
+Stamina,1,Attribute,Physical,5
+Manipulation,1,Attribute,Social,5
+Presence,1,Attribute,Social,5
+Composure,1,Attribute,Social,5
+Gluttony,FALSE,Vice,
+Wraith,FALSE,Vice,
+Envy,FALSE,Vice,
+Greed,FALSE,Vice,
+Sloth,FALSE,Vice,
+Lust,FALSE,Vice,
+Pride,FALSE,Vice,
+Mentor,0,Merit,Social,5
+Inspiring,0,Merit,Social,4
+Allies,0,Merit,Social,5
+Striking Looks,0,Merit,Social,4
+Barfly,0,Merit,Social,1
+Status,0,Merit,Social,5
+Resources,0,Merit,Social,5
+Contacts,0,Merit,Social,5
+Retainer,0,Merit,Social,5
+Fame,0,Merit,Social,3
+Player,,Touches,Final
+Gender,,Touches,Final
+Concept,,Touches,Final
+Description,,Touches,Final
+Experience,0,Touches,Final
+Age,-1,Touches,Final
+Faction,,Touches,Final
+Sex,,Touches,Final
+Name,test,Touches,Final
+Group Name,,Touches,Final
+Occult,0,Skill,Mental,5
+Crafts,0,Skill,Mental,5
+Politics,0,Skill,Mental,5
+Computer,0,Skill,Mental,5
+Medicine,0,Skill,Mental,5
+Investigation,0,Skill,Mental,5
+Science,0,Skill,Mental,5
+Academics,0,Skill,Mental,5
+Streetwise,0,Skill,Social,5
+Empathy,0,Skill,Social,5
+Animal Ken,0,Skill,Social,5
+Expression,0,Skill,Social,5
+Subterfuge,0,Skill,Social,5
+Intimidation,0,Skill,Social,5
+Persuasion,0,Skill,Social,5
+Socialize,0,Skill,Social,5
+Faith,FALSE,Virtue,
+Hope,FALSE,Virtue,
+Fortitude,FALSE,Virtue,
+Temperance,FALSE,Virtue,
+Charity,FALSE,Virtue,
+Prudence,FALSE,Virtue,
+Justice,FALSE,Virtue,

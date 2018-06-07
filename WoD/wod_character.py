@@ -27,40 +27,60 @@ class wChar:
 
         self.inventory = {}
 
-        self.search_list = [self.physical, self.mental, self.social,
-        self.physical_skills,self.mental_skills, self.social_skills, self.traits,
-        self.physical_merits, self.mental_merits, self.social_merits,
-        self.derangements, self.virtue, self.vice, self.final_touches]
-
         self.dict_map = {
-        "PhysicalAttribute" : self.physical, "MentalAttribute" : self.mental, "SocialAttribute" : self.social, "PhysicalSkill" : self.physical_skills,
-        "MentalSkill" : self.mental_skills, "SocialSkill" : self.social_skills, "Trait" : self.traits,
-        "PhysicalMerit" : self.physical_merits, "MentalMerit" : self.mental_merits, "SocialMerit" : self.social_merits,
-        "Derangement" : self.derangements, "Virtue" : self.virtue, "Vice" : self.vice, "FinalTouch" : self.final_touches
-
+        "Physical Attribute" : self.physical, "Mental Attribute" : self.mental,
+        "Social Attribute" : self.social, "Physical Skill" : self.physical_skills,
+        "Mental Skill" : self.mental_skills, "Social Skill" : self.social_skills,
+        "Trait" : self.traits, "Physical Merit" : self.physical_merits,
+        "Mental Merit" : self.mental_merits, "Social Merit" : self.social_merits,
+        "Derangement" : self.derangements, "Virtue" : self.virtue, "Vice" : self.vice,
+        "Final Touches" : self.final_touches, "Inventory Weapon" : self.weapons,
+        "Inventory Item" : self.inventory
         }
         self.change_name(name)
 
-    def add_field(self, file, dictionary):
+    def add_field(self, file):
         # reads data from a file and adds to dictionary
         data = []
         with open(file + ".csv", 'rt') as data_file:
             reader = csv.reader(data_file, delimiter=',')
             header = next(reader) # header of data file
+            type_index = self.parse_header(header, "Type")
+            attribute_index = self.parse_header(header, "Attribute")
+            name = self.parse_header(header, "Name")
             for row in reader:
+                #find the proper dictionary and fill entry with clean data
+                if row != header and type_index != None and attribute_index != None and attribute_index != "":
+                    self.find_dict(self.clean_item(row[type_index]), self.clean_item(row[attribute_index]))[self.clean_item(row[name])] = self.clean_row(row[1:])
+                elif row != header and type_index != None:
+                    self.find_dict(self.clean_item(row[type_index]))[self.clean_item(row[name])] = self.clean_row(row[1:])
+                else:
+                    continue
 
 
+    def parse_header(self, header, key):
+        # find index of header
+        clean_key = self.clean_key(key)
+        if key in header:
+            return header.index(key)
+        else:
+            return None
+
+    def clean_key(self, key):
+        return (str(key).lower()).title()
 
     def clean_row(self, row):
+        # turns .csv row back into proper python types
         n = []
         for item in row:
             n.append(self.clean_item(item))
         return n
 
     def clean_item(self, item):
-        if item == "True":
+        # Could be misevaluated if string really meant to be "TRUE" or "FALSE"
+        if item.capitalize() == "TRUE":
             return True
-        elif item == "False":
+        elif item.capitalize() == "FALSE":
             return False
         elif isinstance(item, bool):
             return item
@@ -74,10 +94,11 @@ class wChar:
             return item
 
     def find_dict(self, type, attribute = None):
+        # Returns proper dictionary based on index
         if(attribute != None):
-            return self.dict_map[type]
+            return self.dict_map[self.clean_key(attribute) + " " + self.clean_key(type)]
         else:
-            return self.dict_map[type + attribute]
+            return self.dict_map[self.clean_key(type)]
 
 
     def increase_exp(self, num = 1):
@@ -85,18 +106,18 @@ class wChar:
 
 
     def change_name(self, name):
-        self.final_touches["Name"] = str(name)
+        self.final_touches["Name"] = [str(name)]
 
     def find_stat(self, key):
          a = self.find_att(key)
          if(a != None):
-             return a[(str(key).lower()).title()]
+             return a[self.clean_key(key)]
          else:
              return None
 
     def find_att(self,key):
-        clean_key = (str(key).lower()).title()
-        for attribute in self.search_list:
+        clean_key = self.clean_key(key)
+        for attribute in self.dict_map.values():
             if clean_key in attribute:
                 return attribute
         print(str(key) + " not found.")
@@ -111,32 +132,46 @@ class wChar:
         self.traits["Speed"] = self.physical["Strength"] + self.physical["Dexterity"] + 5
         self.traits["Morality"] = 7
 
-    def write_attribute(self, dict, writer):
-        return
-
-    def save_char(self):
-        if (self.final_touches["Name"]== None):
+    def save_char(self, path):
+        if ("Name" not in self.final_touches or self.final_touches["Name"] == None or self.final_touches["Name"] == ""):
             print("The Characer needs a name to save. Use change_name().")
             return
-        path = str(self.final_touches["Name"]) + ".csv"
-        with open(path, "w", newline='') as char_file:
+        data = [["Name", "Current", "Type", "Attribute"]]
+        for item in self.dict_map.values():
+            if any(item):
+                for key in item:
+                    # can't do data.append([key].extend(item[key])) ??
+                    row = [key]
+                    row.extend(item[key])
+                    data.append(row)
+        with open(path + ".csv", "w", newline='') as char_file:
             writer = csv.writer(char_file, delimiter=',')
             for stat in data:
                 writer.writerow(stat)
 
+    def print_attributes(self, attributes, index = 0, present = False):
+        # present to print attributes even if they have a value of 0
+        if present:
+            for attribute in attributes:
+                print(attribute + " " + str(attributes[attribute][index]))
+        else:
+            for attribute in attributes:
+                if (attributes[attribute] != 0):
+                   print(attribute + " " + str(attributes[attribute][index]))
+
     def print_char(self):
         # @TODO finish printing sheet
-        self.print_attributes(self.final_touches, True)
+        self.print_attributes(self.final_touches, 0, True)
         print("")
         print("Attributes")
         print("---------------------------------------------------------------")
-        self.print_attributes(self.physical, True)
-        self.print_attributes(self.mental, True)
-        self.print_attributes(self.social, True)
+        self.print_attributes(self.physical, 0, True)
+        self.print_attributes(self.mental, 0, True)
+        self.print_attributes(self.social, 0, True)
         print("")
         print("Traits")
         print("---------------------------------------------------------------")
-        self.print_attributes(self.traits, True)
+        self.print_attributes(self.traits, 0, True)
         print("")
         print("Skills")
         print("---------------------------------------------------------------")
