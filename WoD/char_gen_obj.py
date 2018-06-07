@@ -2,8 +2,6 @@
 
 ##@TODO
 ##- Make GUI
-##- Push character data to external module
-##- Add Equipment
 ##- Attack dice and modifiers
 ##- Skill modifier and roll
 ##- Merit modifiers

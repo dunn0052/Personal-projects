@@ -1,9 +1,18 @@
 # data char generator
+
+## @TODO
+## current values of type bool are loaded as string
+## Player GUI
+## DM program/GUI
+## add flaws
+## merit modifiers??
+## random character generator template using original functions
+## keep this doc to strictly store, save, and load char data
 import csv
 import random
 
 class wChar:
-    def __init__(self, name = None):
+    def __init__(self):
 
         # All attributes must begin every word with capital for search to work
         self.physical = {}
@@ -37,7 +46,6 @@ class wChar:
         "Final Touches" : self.final_touches, "Inventory Weapon" : self.weapons,
         "Inventory Item" : self.inventory
         }
-        self.change_name(name)
 
     def add_field(self, file):
         # reads data from a file and adds to dictionary
@@ -50,7 +58,7 @@ class wChar:
             name = self.parse_header(header, "Name")
             for row in reader:
                 #find the proper dictionary and fill entry with clean data
-                if row != header and type_index != None and attribute_index != None and attribute_index != "":
+                if row != header and type_index != None and attribute_index != None:
                     self.find_dict(self.clean_item(row[type_index]), self.clean_item(row[attribute_index]))[self.clean_item(row[name])] = self.clean_row(row[1:])
                 elif row != header and type_index != None:
                     self.find_dict(self.clean_item(row[type_index]))[self.clean_item(row[name])] = self.clean_row(row[1:])
@@ -102,11 +110,11 @@ class wChar:
 
 
     def increase_exp(self, num = 1):
-        self.final_touches["Experience"] += num
+        self.final_touches["Experience"][0] += num
 
 
     def change_name(self, name):
-        self.final_touches["Name"] = [str(name)]
+        self.final_touches["Character Name"][0] = str(name)
 
     def find_stat(self, key):
          a = self.find_att(key)
@@ -124,16 +132,16 @@ class wChar:
         return None
 
     def char_calc(self):
-        self.traits["Size"] = 5
-        self.traits["Health"] = self.traits["Size"] + self.physical["Stamina"]
-        self.traits["Willpower"] = self.mental["Resolve"] + self.social["Composure"]
-        self.traits["Defense"] = min(self.physical["Dexterity"], self.mental["Wits"])
-        self.traits["Initiative"] = self.physical["Dexterity"] + self.social["Composure"]
-        self.traits["Speed"] = self.physical["Strength"] + self.physical["Dexterity"] + 5
-        self.traits["Morality"] = 7
+        self.traits["Size"][0] = 5
+        self.traits["Health"][0] = self.traits["Size"][0] + self.physical["Stamina"][0]
+        self.traits["Willpower"][0] = self.mental["Resolve"][0] + self.social["Composure"][0]
+        self.traits["Defense"][0] = min(self.physical["Dexterity"][0], self.mental["Wits"][0])
+        self.traits["Initiative"][0] = self.physical["Dexterity"][0] + self.social["Composure"][0]
+        self.traits["Speed"][0] = self.physical["Strength"][0] + self.physical["Dexterity"][0] + 5
+        self.traits["Morality"][0] = 7
 
     def save_char(self, path):
-        if ("Name" not in self.final_touches or self.final_touches["Name"] == None or self.final_touches["Name"] == ""):
+        if ("Character Name" not in self.final_touches or self.final_touches["Character Name"][0] == None or self.final_touches["Character Name"] == ""):
             print("The Characer needs a name to save. Use change_name().")
             return
         data = [["Name", "Current", "Type", "Attribute"]]
@@ -143,6 +151,10 @@ class wChar:
                     # can't do data.append([key].extend(item[key])) ??
                     row = [key]
                     row.extend(item[key])
+                    if row[3] == None:
+                        # probably a better way to do this
+                        row[3] = "None"
+                    print(row)
                     data.append(row)
         with open(path + ".csv", "w", newline='') as char_file:
             writer = csv.writer(char_file, delimiter=',')
@@ -156,7 +168,7 @@ class wChar:
                 print(attribute + " " + str(attributes[attribute][index]))
         else:
             for attribute in attributes:
-                if (attributes[attribute] != 0):
+                if (attributes[attribute][0] != 0):
                    print(attribute + " " + str(attributes[attribute][index]))
 
     def print_char(self):

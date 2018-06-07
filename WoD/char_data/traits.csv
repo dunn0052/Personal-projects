@@ -1,7 +1,8 @@
-Health,0
-Initiative,0
-Speed,0
-Size,0
-Morality,0
-Defense,0
-Willpower,0
+Name,Current Value,Type,Attribute
+Health,0,Trait,None
+Initiative,0,Trait,None
+Speed,0,Trait,None
+Size,0,Trait,None
+Morality,0,Trait,None
+Defense,0,Trait,None
+Willpower,0,Trait,None
