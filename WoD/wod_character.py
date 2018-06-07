@@ -1,7 +1,6 @@
 # data char generator
 
 ## @TODO
-## current values of type bool are loaded as string
 ## Player GUI
 ## DM program/GUI
 ## add flaws
@@ -12,8 +11,7 @@ import csv
 import random
 
 class wChar:
-    def __init__(self):
-
+    def __init__(self, name = None):
         # All attributes must begin every word with capital for search to work
         self.physical = {}
         self.mental = {}
@@ -46,6 +44,7 @@ class wChar:
         "Final Touches" : self.final_touches, "Inventory Weapon" : self.weapons,
         "Inventory Item" : self.inventory
         }
+        self.change_name(name)
 
     def add_field(self, file):
         # reads data from a file and adds to dictionary
@@ -109,7 +108,7 @@ class wChar:
             return self.dict_map[self.clean_key(type)]
 
     def change_name(self, name):
-        self.final_touches["Character Name"][0] = str(name)
+        self.final_touches["Character Name"] = [name, "Touches", "Final"]
 
     def find_stat(self, key):
          a = self.find_att(key)
@@ -171,15 +170,18 @@ class wChar:
                 writer.writerow(stat)
         char_file.close()
 
-    def print_attributes(self, attributes, index = 0, present = False):
+    def print_attributes(self, attributes, index = 0, present = False, bool_val = True):
         # present to print attributes even if they have a value of 0
+        # bool_val = True if you don't want to print True
         if present:
             for attribute in attributes:
-                print(attribute + " " + str(attributes[attribute][index]))
+                print(attribute + ": " + str(attributes[attribute][index]))
         else:
             for attribute in attributes:
-                if (attributes[attribute][0] != 0):
-                   print(attribute + " " + str(attributes[attribute][index]))
+                if (attributes[attribute][index] != 0 and bool_val):
+                    print(attribute + ": " + str(attributes[attribute][index]))
+                elif(attributes[attribute][index] != 0 and not bool_val):
+                    print(attribute)
 
     def print_char(self):
         # @TODO finish printing sheet
@@ -209,9 +211,9 @@ class wChar:
         print("")
         print("Derangements")
         print("---------------------------------------------------------------")
-        self.print_attributes(self.derangements)
+        self.print_attributes(self.derangements, 0, False, False)
         print("")
         print("Virtue and Vice")
         print("---------------------------------------------------------------")
-        self.print_attributes(self.virtue)
-        self.print_attributes(self.vice)
+        self.print_attributes(self.virtue, 0, False, False)
+        self.print_attributes(self.vice, 0, False, False)
