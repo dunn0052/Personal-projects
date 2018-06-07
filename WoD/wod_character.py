@@ -59,12 +59,12 @@ class wChar:
             for row in reader:
                 #find the proper dictionary and fill entry with clean data
                 if row != header and type_index != None and attribute_index != None:
-                    self.find_dict(self.clean_item(row[type_index]), self.clean_item(row[attribute_index]))[self.clean_item(row[name])] = self.clean_row(row[1:])
+                    self.find_dict(self.clean_item(row[type_index]), self.clean_item(row[attribute_index]))[self.clean_key(row[name])] = self.clean_row(row[1:])
                 elif row != header and type_index != None:
-                    self.find_dict(self.clean_item(row[type_index]))[self.clean_item(row[name])] = self.clean_row(row[1:])
+                    self.find_dict(self.clean_item(row[type_index]))[self.clean_key(row[name])] = self.clean_row(row[1:])
                 else:
                     continue
-
+        data_file.close()
 
     def parse_header(self, header, key):
         # find index of header
@@ -86,9 +86,9 @@ class wChar:
 
     def clean_item(self, item):
         # Could be misevaluated if string really meant to be "TRUE" or "FALSE"
-        if item.capitalize() == "TRUE":
+        if item.upper() == "TRUE":
             return True
-        elif item.capitalize() == "FALSE":
+        elif item.upper() == "FALSE":
             return False
         elif isinstance(item, bool):
             return item
@@ -107,11 +107,6 @@ class wChar:
             return self.dict_map[self.clean_key(attribute) + " " + self.clean_key(type)]
         else:
             return self.dict_map[self.clean_key(type)]
-
-
-    def increase_exp(self, num = 1):
-        self.final_touches["Experience"][0] += num
-
 
     def change_name(self, name):
         self.final_touches["Character Name"][0] = str(name)
@@ -140,6 +135,22 @@ class wChar:
         self.traits["Speed"][0] = self.physical["Strength"][0] + self.physical["Dexterity"][0] + 5
         self.traits["Morality"][0] = 7
 
+    def der_map(self, key):
+        derangements_map = [
+        "Depression" , "Melancholia",
+        "Phobia" , "Hysteria",
+        "Narcissism" , "Megalomania",
+        "Fixation" , "Obsessive Compulsion",
+        "Suspicion" , "Paranoia",
+        "Inferiority Complex" , "Anxiety",
+        "Vocalization" , "Schizophrenia",
+        "Irrationality" , "Multiple Personality",
+        "Avoidance" , "Fugue"]
+
+        place = derangements_map.index(key)
+        return (derangements_map[place], derangements_map[place-1]) if (place % 2 == 1) else (derangements_map[place], derangements_map[place + 1])
+
+
     def save_char(self, path):
         if ("Character Name" not in self.final_touches or self.final_touches["Character Name"][0] == None or self.final_touches["Character Name"] == ""):
             print("The Characer needs a name to save. Use change_name().")
@@ -151,15 +162,14 @@ class wChar:
                     # can't do data.append([key].extend(item[key])) ??
                     row = [key]
                     row.extend(item[key])
-                    if row[3] == None:
-                        # probably a better way to do this
-                        row[3] = "None"
-                    print(row)
+                    if len(row) < 4:
+                        row.append("None")
                     data.append(row)
         with open(path + ".csv", "w", newline='') as char_file:
             writer = csv.writer(char_file, delimiter=',')
             for stat in data:
                 writer.writerow(stat)
+        char_file.close()
 
     def print_attributes(self, attributes, index = 0, present = False):
         # present to print attributes even if they have a value of 0

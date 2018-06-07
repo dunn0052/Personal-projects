@@ -1,15 +1,15 @@
-Name,Current Value,Type,Attribute
-Wraith,FALSE,Vice,None
-Sloth,FALSE,Vice,None
-Pride,FALSE,Vice,None
-Greed,FALSE,Vice,None
-Envy,FALSE,Vice,None
-Lust,FALSE,Vice,None
-Gluttony,FALSE,Vice,None
-Fortitude,FALSE,Virtue,None
-Charity,FALSE,Virtue,None
-Temperance,FALSE,Virtue,None
-Faith,FALSE,Virtue,None
-Prudence,FALSE,Virtue,None
-Hope,FALSE,Virtue,None
-Justice,FALSE,Virtue,None
+Name,Current Value,Type
+Wraith,FALSE,Vice
+Sloth,FALSE,Vice
+Pride,FALSE,Vice
+Greed,FALSE,Vice
+Envy,FALSE,Vice
+Lust,FALSE,Vice
+Gluttony,FALSE,Vice
+Fortitude,FALSE,Virtue
+Charity,FALSE,Virtue
+Temperance,FALSE,Virtue
+Faith,FALSE,Virtue
+Prudence,FALSE,Virtue
+Hope,FALSE,Virtue
+Justice,FALSE,Virtue
