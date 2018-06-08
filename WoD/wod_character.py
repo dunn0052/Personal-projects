@@ -32,7 +32,7 @@ class wChar:
         self.skill_specialization = {}
 
         self.weapons = {}
-
+        self.armor = {}
         self.inventory = {}
 
 
@@ -43,10 +43,11 @@ class wChar:
         "Trait" : self.traits, "Physical Merit" : self.physical_merits,
         "Mental Merit" : self.mental_merits, "Social Merit" : self.social_merits,
         "Derangement" : self.derangements, "Virtue" : self.virtue, "Vice" : self.vice,
-        "Final Touches" : self.final_touches, "Inventory Weapon" : self.weapons,
-        "Inventory Item" : self.inventory, "Flaw" : self.flaws
+        "Final Touches" : self.final_touches, "Weapon Inventory" : self.weapons,
+        "Item Inventory" : self.inventory, "Armor Inventory" : self.armor, "Flaw" : self.flaws
         }
         self.change_name(name)
+        self.initialize_char_data()
 
     def add_field(self, file):
         # reads data from a file and adds to dictionary
@@ -55,6 +56,7 @@ class wChar:
             reader = csv.reader(data_file, delimiter=',')
             header = next(reader) # header of data file
             type_index = self.parse_header(header, "Type")
+            # Change "Attribute" header to something better
             attribute_index = self.parse_header(header, "Attribute")
             name = self.parse_header(header, "Name")
             for row in reader:
@@ -71,6 +73,7 @@ class wChar:
         # find index of header - officially: [name, current value, type, attribute, etc. ]
         # order doesn't matter when loading initial data, but saved characters will
         # have all traits organized by the first 4 header values in that order
+        # save as plain .csv - save as whatever the other files are in if errors
         clean_key = self.clean_key(key)
         if key in header:
             return header.index(key)
@@ -132,6 +135,19 @@ class wChar:
                 return attribute
         print(str(key) + " not found.")
         return None
+
+    def initialize_char_data(self):
+        self.add_field("char_data/Attributes")
+        self.add_field("char_data/Final_Touches")
+        self.add_field("char_data/Merits")
+        self.add_field("char_data/Skills")
+        self.add_field("char_data/Virtue_Vice")
+        self.add_field("char_data/Derangements")
+        self.add_field("char_data/Traits")
+        self.add_field("item_data/Melee_Weapons")
+        self.add_field("item_data/Ranged_Weapons")
+        self.add_field("item_data/Items")
+        self.add_field("item_data/Armor")
 
     def char_calc(self):
         self.traits["Size"][0] = 5
@@ -227,3 +243,9 @@ class wChar:
         print("---------------------------------------------------------------")
         self.print_attributes(self.virtue, bool_val = False)
         self.print_attributes(self.vice, bool_val = False)
+        print("")
+        print("Inventory")
+        print("---------------------------------------------------------------")
+        self.print_attributes(self.weapons)
+        self.print_attributes(self.inventory)
+        self.print_attributes(self.armor)
