@@ -1,11 +1,10 @@
 # data char generator
 
 ## @TODO
-## Player GUI
-## DM program/GUI
+## Player GUI - began
+## DM program/GUI - began
 ## add flaws
 ## merit modifiers??
-## random character generator template using original functions
 ## keep this doc to strictly store, save, and load char data
 import csv
 import random
@@ -25,14 +24,15 @@ class wChar:
         self.derangements = {}
         self.mental_merits = {}
         self.physical_merits = {}
-
         self.social_merits = {}
+        self.flaws = {}
         self.final_touches = {}
         self.skill_specialization = {}
 
         self.weapons = {}
 
         self.inventory = {}
+
 
         self.dict_map = {
         "Physical Attribute" : self.physical, "Mental Attribute" : self.mental,
@@ -42,7 +42,7 @@ class wChar:
         "Mental Merit" : self.mental_merits, "Social Merit" : self.social_merits,
         "Derangement" : self.derangements, "Virtue" : self.virtue, "Vice" : self.vice,
         "Final Touches" : self.final_touches, "Inventory Weapon" : self.weapons,
-        "Inventory Item" : self.inventory
+        "Inventory Item" : self.inventory, "Flaw" : self.flaws
         }
         self.change_name(name)
 
@@ -184,18 +184,17 @@ class wChar:
                     print(attribute)
 
     def print_char(self):
-        # @TODO finish printing sheet
-        self.print_attributes(self.final_touches, 0, True)
+        self.print_attributes(self.final_touches, present = True)
         print("")
         print("Attributes")
         print("---------------------------------------------------------------")
-        self.print_attributes(self.physical, 0, True)
-        self.print_attributes(self.mental, 0, True)
-        self.print_attributes(self.social, 0, True)
+        self.print_attributes(self.physical, present = True)
+        self.print_attributes(self.mental, present = True)
+        self.print_attributes(self.social, present = True)
         print("")
         print("Traits")
         print("---------------------------------------------------------------")
-        self.print_attributes(self.traits, 0, True)
+        self.print_attributes(self.traits, present = True)
         print("")
         print("Skills")
         print("---------------------------------------------------------------")
@@ -211,9 +210,9 @@ class wChar:
         print("")
         print("Derangements")
         print("---------------------------------------------------------------")
-        self.print_attributes(self.derangements, 0, False, False)
+        self.print_attributes(self.derangements, bool_val = False)
         print("")
         print("Virtue and Vice")
         print("---------------------------------------------------------------")
-        self.print_attributes(self.virtue, 0, False, False)
-        self.print_attributes(self.vice, 0, False, False)
+        self.print_attributes(self.virtue, bool_val = False)
+        self.print_attributes(self.vice, bool_val = False)
