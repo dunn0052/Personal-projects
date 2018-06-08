@@ -2,9 +2,11 @@
 
 ## @TODO
 ## Player GUI - began
+## Seperate player creation module
 ## DM program/GUI - began
-## add flaws
-## merit modifiers??
+## add flaws/ method to add them?
+## merit modifiers/prereqs??
+## skill prereqs?
 ## keep this doc to strictly store, save, and load char data
 import csv
 import random
@@ -56,7 +58,7 @@ class wChar:
             attribute_index = self.parse_header(header, "Attribute")
             name = self.parse_header(header, "Name")
             for row in reader:
-                #find the proper dictionary and fill entry with clean data
+                # find the proper dictionary and fill entry with clean data
                 if row != header and type_index != None and attribute_index != None:
                     self.find_dict(self.clean_item(row[type_index]), self.clean_item(row[attribute_index]))[self.clean_key(row[name])] = self.clean_row(row[1:])
                 elif row != header and type_index != None:
@@ -66,7 +68,9 @@ class wChar:
         data_file.close()
 
     def parse_header(self, header, key):
-        # find index of header
+        # find index of header - officially: [name, current value, type, attribute, etc. ]
+        # order doesn't matter when loading initial data, but saved characters will
+        # have all traits organized by the first 4 header values in that order
         clean_key = self.clean_key(key)
         if key in header:
             return header.index(key)
@@ -74,17 +78,19 @@ class wChar:
             return None
 
     def clean_key(self, key):
+        # all keys have capital letters beginning each word
         return (str(key).lower()).title()
 
     def clean_row(self, row):
-        # turns .csv row back into proper python types
+        # turns .csv row back into thier respective data types as .csv is all strings
         n = []
         for item in row:
             n.append(self.clean_item(item))
         return n
 
     def clean_item(self, item):
-        # Could be misevaluated if string really meant to be "TRUE" or "FALSE"
+        # Mess with edgelords wanting to name their character "False"
+        # Actually could be a big problem if string was meant to be "TRUE"/"FALSE"
         if item.upper() == "TRUE":
             return True
         elif item.upper() == "FALSE":
@@ -101,7 +107,7 @@ class wChar:
             return item
 
     def find_dict(self, type, attribute = None):
-        # Returns proper dictionary based on index
+        # Use attribute and type to index matching dictionary
         if(attribute != None):
             return self.dict_map[self.clean_key(attribute) + " " + self.clean_key(type)]
         else:
@@ -111,13 +117,15 @@ class wChar:
         self.final_touches["Character Name"] = [name, "Touches", "Final"]
 
     def find_stat(self, key):
-         a = self.find_att(key)
-         if(a != None):
-             return a[self.clean_key(key)]
-         else:
-             return None
+        # find attribute in any dictionary - will return first found - no duplicates
+        a = self.find_att(key)
+        if(a != None):
+            return a[self.clean_key(key)]
+        else:
+            return None
 
     def find_att(self,key):
+        # return the first dictionary where the stat is found - no duplicates
         clean_key = self.clean_key(key)
         for attribute in self.dict_map.values():
             if clean_key in attribute:
@@ -147,6 +155,7 @@ class wChar:
         "Avoidance" , "Fugue"]
 
         place = derangements_map.index(key)
+        # tuple of (minor, major)
         return (derangements_map[place], derangements_map[place-1]) if (place % 2 == 1) else (derangements_map[place], derangements_map[place + 1])
 
 
@@ -161,6 +170,7 @@ class wChar:
                     # can't do data.append([key].extend(item[key])) ??
                     row = [key]
                     row.extend(item[key])
+                    # saving without attribute - default to None
                     if len(row) < 4:
                         row.append("None")
                     data.append(row)
@@ -171,8 +181,9 @@ class wChar:
         char_file.close()
 
     def print_attributes(self, attributes, index = 0, present = False, bool_val = True):
-        # present to print attributes even if they have a value of 0
-        # bool_val = True if you don't want to print True
+        # present to print attributes even if they have a value of 0/False
+        # bool_val = True if you don't want to print any bool values
+        # present = True if you want to print out everything and ignore bool_val
         if present:
             for attribute in attributes:
                 print(attribute + ": " + str(attributes[attribute][index]))

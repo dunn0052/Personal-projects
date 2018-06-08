@@ -1,4 +1,7 @@
 # random char generator
+
+# @TODO
+# increase_stat to serch by type instead of direct dictionary access
 import random
 import wod_character
 
@@ -30,7 +33,8 @@ class wChar_rand:
               print("Could not add " + specialization + " to " + skill)
 
     def add_weapon(self, name, list = "weapons"):
-      #reads data from weapon list - could be made generic
+      # reads data from weapon list - could be made generic for all items
+      # should probably use add_field from wod_character
       data = []
       with open(list + ".csv", 'rt') as weapon_file:
           reader = csv.reader(weapon_file, delimiter=',')
@@ -41,7 +45,8 @@ class wChar_rand:
                   break
 
     def increase_stat(self, stat, dot = 1, free = False, override = False):
-        # free = True if increase doesn't cost exp - override for GM override
+        # free = True if increase doesn't cost exp - for GM override
+        # could be made less messy by searching through type
         if (stat in self.character.physical or stat in self.character.mental or stat in self.character.social):
             mult = 5
             max_val = stat[3]
@@ -67,6 +72,7 @@ class wChar_rand:
         self.character.final_touches["Character Name"] = [name, "Touches", "Final"]
 
     def find_stat(self, key):
+        # duplicate of wod_character
          a = self.character.find_att(key)
          if(a != None):
              return a[(str(key).lower()).title()]
@@ -74,6 +80,7 @@ class wChar_rand:
              return None
 
     def find_att(self,key):
+        # duplicate of wod_character
         clean_key = (str(key).lower()).title()
         for attribute in self.character.search_list:
             if clean_key in attribute:
@@ -111,7 +118,7 @@ class wChar_rand:
                 self.rand_point_distribute(1, self.character.social_merits)
 
     def rand_att(self):
-
+        # Could make generic initial stat dots in __init__
         self.rand_dot_dist(self.character.physical, self.character.mental, self.character.social, 5, 4, 3)
         self.rand_dot_dist(self.character.physical_skills, self.character.mental_skills, self.character.social_skills, 11, 7, 4)
         self.rand_merit_dist(7)
