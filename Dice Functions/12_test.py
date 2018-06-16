@@ -2,7 +2,7 @@
 
 from dice_sum import *
 
-twelve = dice_gen(12)
-y = sum_dice(twelve.die)
-y.mult(twelve.die, 4)
-y.chance()
+sixdsix = sum_dice()
+sixdsix.series = sixdsix.make_die()
+sixdsix.mult(sixdsix.make_die(), 5)
+sixdsix.chance()

@@ -1,19 +1,16 @@
 # use dynamic programming
 
-class dice_gen:
-
-    def __init__(self, sides = 6):
-        self.die = []
-        for i in range(1, sides+1):
-            self.die.append([1,i])
 
 
 class sum_dice:
 
-    def __init__(self, series = []):
-        self.series = series
+    def __init__(self):
+        self.series = []
+        self.dice_pool = []
 
     def mult(self, mult, n = 1):
+        # n = how many more dice beyond the self.series calculation
+        # so 6d6 would have n = 5 since the first die is self.series
         x = mult
         for i in range(0, n):
             product = []
@@ -47,7 +44,15 @@ class sum_dice:
         combination.append([coef, first])
         self.series = combination
 
-    def chance(self):
+    def chance(self, n = 4):
         total = sum(x[0] for x in self.series)
         for coef in self.series:
-            print(str(coef[1]) + " : " + "{:.4%}".format(coef[0]/total))
+            # look at this backaswwardness for precision
+            precision = "{:."+ str(n) + "%}"
+            print(str(coef[1]) + " : " + precision.format(coef[0]/total))
+
+    def make_die(self, sides = 6):
+        die = []
+        for i in range(1, sides+1):
+            die.append([1,i])
+        return die
