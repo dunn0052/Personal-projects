@@ -56,3 +56,12 @@ class sum_dice:
         for i in range(1, sides+1):
             die.append([1,i])
         return die
+
+    def expected_output(self):
+        total = sum(x[0] for x in self.series)
+        out = 0
+        for coef in self.series:
+            out += coef[1]*coef[0]/total
+
+        print("{:.4}".format(out))
+        return out
