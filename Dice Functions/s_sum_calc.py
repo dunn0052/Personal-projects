@@ -12,8 +12,6 @@ def nCk(n,k):
 def sum_calc(S,n,m):
     # S = sum, n = # of dice, m = # of faces
     total=0
-    # from https://www.quora.com/How-do-you-find-the-number-of-ways
-    # -the-sum-of-k-dice-rolls-equals-S-for-an-n-sided-fair-die
     for r in range(int(floor((S-n)/float(m)))+1):
         total += (-1)**r*nCk((S-1-m*r), n-1)*nCk(n,r)
     return total
