@@ -63,5 +63,5 @@ class sum_dice:
         for coef in self.series:
             out += coef[1]*coef[0]/total
 
-        print("{:.4}".format(out))
+        print("Expected output: " + "{:.4}".format(out))
         return out
