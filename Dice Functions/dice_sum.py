@@ -23,7 +23,7 @@ def mult(x, y, n = 1):
     return x 
     
 
-def combine(x):
+def combine(x, ret = True):
     combination = []
     # sort by deg
     x.sort(key = lambda x: x[1])
@@ -43,15 +43,20 @@ def combine(x):
             first = term[1]
     # missing the last term? oh well it's fixed now.
     combination.append([coef, first])
-    return combination
+    if ret:
+        return combination
 
-def chance(p, n = 4):
+def chance(p, n = 4, ret = False):
     total = float(sum(x[0] for x in p))
-    for coef in p:
-        # look at this backaswwardness for precision
-        precision = "{:."+ str(n) + "%}"
+    percent = []
+    # look at this backaswwardness for precision
+    precision = "{:."+ str(n) + "%}"
+    for coef in p:     
         print(str(coef[1]) + " : " + precision.format(coef[0]/total))
-
+        percent.append([coef[1],coef[0]/total])
+    if ret:
+        return percent
+                       
 def make_die(sides = 6):
     die = []
     for i in range(1, sides+1):
@@ -59,10 +64,11 @@ def make_die(sides = 6):
         die.append([1,i])
     return die
 
-def expected_output(p):
+def expected_output(p, ret = False):
     total = float(sum(x[0] for x in p))
     out = 0
     for coef in p:
         out += coef[1]*coef[0]/total
     print("Expected output: " + "{:.4}".format(out))
-    return out
+    if ret:
+        return out

@@ -1,27 +1,24 @@
 # efficient sum calc, all probabilites in O(n^3) because of choose, sum_calc, then find prob
 # still no closed formula found, but probably as cheap as you can get
 from math import *
-from operator import mul
 from fractions import Fraction
+from functools import *
 
 def nCk(n,k):
-    # from https://stackoverflow.com/questions/3025162/statistics-combinations-in-python
-    return int( reduce(mul, (Fraction(n-i, i+1) for i in range(k)), 1))
+    return int( reduce(lambda x,y: x*y, (Fraction(n-i, i+1) for i in range(k)), 1))
+    # make a list of fractions of (n - k + 1)/(k!). Then take all fractions in the list
+    # and multiply them all toegether beginning it all by multiplying by 1. Then
+    # reduce that fraction and convert the number back into an integer.
 
 
 def sum_calc(S,n,m):
+    # inclusion/exclusion principal
     # S = sum, n = # of dice, m = # of faces
-    total=0
-    for r in range(int(floor((S-n)/float(m)))+1):
-        total += (-1)**r*nCk((S-1-m*r), n-1)*nCk(n,r)
-    return total
+    return reduce(lambda x,y: x + y ,((-1)**r*nCk((S-1-m*r), n-1)*nCk(n,r) for r in range(int(floor((S-n)/float(m)))+1)), 0)
+
 
 def prob(n,m):
-    percents = []
-    sample_space = float(m**n)
-    for i in range(n,n*m+1):
-        percents.append([i, sum_calc(i,n,m)/sample_space])
-    return percents
+        return map(lambda i: [i, sum_calc(i,n,m)/float(m**n)], range(n,n*m+1))
 
 def print_percents(n,m,p=4):
     precision = "{:."+str(p)+"%}"

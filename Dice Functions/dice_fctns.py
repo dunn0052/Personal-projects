@@ -1,22 +1,36 @@
 #dice functions
 
 
-def factorial(n):
+def factorial(n, prod = 1):
     if(n < 0):
         print("can't be negative")
+        #for now
         return
     elif(n%1 > 0): 
         print("must be whole number")
-        return
-        
+        return    
     if(n == 0):
         return 1
     if (n > 1):
-        n = factorial(n-1) * n
-        return n
+        #non tail recursion
+        prod *= n
+        return factorial(n-1, prod)
         #recursive iteration
     else:
-        return n
+        return prod
+
+def way_better_factorial(n):
+    if(n > 1 and n%1 == 0):
+        prod = 1
+        if n == 0:
+            return prod
+        while(n > 1):
+            prod *= n
+            n -= 1
+        return prod
+    else:
+        print("can't do that")
+        return
 
     
 def choose(n, r):
@@ -36,6 +50,8 @@ def binomial_at_least(n,k,p):
         prob = prob + choose(n,k)*(p)**k*(1-p)**(n-k)
         k = k + 1
     return prob
+def binomial_at_least_map(n,k,p):
+    return
 
 
 

@@ -7,7 +7,5 @@ for i in range(10):
     # first die, second die, how many times to roll second die with 1 roll of first
     chance(mult(make_die(6),make_die(6),i))
     print("Using inclusion/exclusion with " + str(i) + " dice.")
-    # rolling x die n
     print_percents(i,6)
 
-# 
