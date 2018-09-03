@@ -3,6 +3,7 @@
 from math import *
 from fractions import Fraction
 from functools import *
+import matplotlib.pyplot as plt
 
 def nCk(n,k):
     return int( reduce(lambda x,y: x*y, (Fraction(n-i, i+1) for i in range(k)), 1))
@@ -24,3 +25,14 @@ def print_percents(n,m,p=4):
     precision = "{:."+str(p)+"%}"
     for terms in prob(n,m):
         print(str(terms[0])+" : "+precision.format(terms[1]))
+
+#n = number of dice, #m = number of sides
+def graph_percents(n,m, x = [], y = []):
+    p = prob(n,m)
+    for e in p:
+        x.append(e[0])
+        y.append(e[1])
+    plt.plot(x, y, 'ro')
+    plt.xlabel("Sums")
+    plt.ylabel("Percent %")
+    plt.show()

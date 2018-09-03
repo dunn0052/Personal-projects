@@ -69,6 +69,13 @@ class wChar:
                     continue
         data_file.close()
 
+    def add_item(self, name, data, current_value, type, attribute = None):
+        dictionary = self.find_dict(type, attribute)
+        if dictionary != None:
+            dictionary[name] = [current_value, type, attribute]
+            dictionary[name].extend(data)
+
+
     def parse_header(self, header, key):
         # find index of header - officially: [name, current value, type, attribute, etc. ]
         # order doesn't matter when loading initial data, but saved characters will
@@ -111,7 +118,7 @@ class wChar:
 
     def find_dict(self, type, attribute = None):
         # Use attribute and type to index matching dictionary
-        if(attribute != None):
+        if(attribute != None and attribute != ""):
             return self.dict_map[self.clean_key(attribute) + " " + self.clean_key(type)]
         else:
             return self.dict_map[self.clean_key(type)]
@@ -127,7 +134,7 @@ class wChar:
         else:
             return None
 
-    def find_att(self,key):
+    def find_att(self, key):
         # return the first dictionary where the stat is found - no duplicates
         clean_key = self.clean_key(key)
         for attribute in self.dict_map.values():
@@ -172,7 +179,7 @@ class wChar:
 
         place = derangements_map.index(key)
         # tuple of (minor, major)
-        return (derangements_map[place], derangements_map[place-1]) if (place % 2 == 1) else (derangements_map[place], derangements_map[place + 1])
+        return (derangements_map[place], derangements_map[place-1]) if (place % 2) else (derangements_map[place], derangements_map[place + 1])
 
 
     def save_char(self, path):
@@ -196,19 +203,40 @@ class wChar:
                 writer.writerow(stat)
         char_file.close()
 
+    def load_char(self, name):
+        # reads data from save file - name must be in quotes
+        self.add_field(name)
+        self.char_calc()
+
     def print_attributes(self, attributes, index = 0, present = False, bool_val = True):
         # present to print attributes even if they have a value of 0/False
         # bool_val = True if you don't want to print any bool values
         # present = True if you want to print out everything and ignore bool_val
         if present:
             for attribute in attributes:
+                if attribute in self.skill_specialization:
+                    print(attribute + ": ", end="", flush=True)
+                    self.print_horizontal_list(self.skill_specialization[attribute])
+                    return
                 print(attribute + ": " + str(attributes[attribute][index]))
         else:
             for attribute in attributes:
                 if (attributes[attribute][index] != 0 and bool_val):
+                    if attribute in self.skill_specialization:
+                        print(attribute + ": ", end="", flush=True)
+                        self.print_horizontal_list(self.skill_specialization[attribute])
+                        return
                     print(attribute + ": " + str(attributes[attribute][index]))
                 elif(attributes[attribute][index] != 0 and not bool_val):
                     print(attribute)
+
+    def print_horizontal_list(self, list):
+        # only works for python 3
+        for items in list:
+            print((items + ", "), end="", flush=True)
+            # for python 2 use:
+            # print (items + ", ") ,
+            print("")
 
     def print_char(self):
         self.print_attributes(self.final_touches, present = True)

@@ -3,7 +3,7 @@
 # @TODO
 # increase_stat to serch by type instead of direct dictionary access
 import random
-import wod_character
+from wod_character import wChar
 
 class wChar_rand:
     def __init__(self, character):
