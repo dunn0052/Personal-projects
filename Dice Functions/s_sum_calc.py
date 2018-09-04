@@ -4,6 +4,7 @@ from math import *
 from fractions import Fraction
 from functools import *
 import matplotlib.pyplot as plt
+import crw
 
 def nCk(n,k):
     return int( reduce(lambda x,y: x*y, (Fraction(n-i, i+1) for i in range(k)), 1))
@@ -32,7 +33,16 @@ def graph_percents(n,m, x = [], y = []):
     for e in p:
         x.append(e[0])
         y.append(e[1])
-    plt.plot(x, y, 'ro')
+    plt.bar(x, y, align = 'center')
+    plt.title(str(n)+"d"+str(m))
+    plt.xticks(range(min(x), max(x)+1, 2))
+    plt.gca().set_yticklabels(['{:.0f}%'.format(x*100) for x in plt.gca().get_yticks()]) 
     plt.xlabel("Sums")
     plt.ylabel("Percent %")
     plt.show()
+
+def save_prob(n,m):
+    p = prob(n,m)
+    name = str(n)+"d"+str(m)
+    crw.setData("percents/" + name, p)
+    
