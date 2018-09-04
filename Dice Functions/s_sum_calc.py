@@ -2,7 +2,7 @@
 # still no closed formula found, but probably as cheap as you can get
 from math import *
 from fractions import Fraction
-from functools import *
+from functools import reduce
 import matplotlib.pyplot as plt
 import crw
 
@@ -22,23 +22,30 @@ def sum_calc(S,n,m):
 def prob(n,m):
         return map(lambda i: [i, sum_calc(i,n,m)/float(m**n)], range(n,n*m+1))
 
+def expected(num, per):
+    expected = 0
+    for i in range(len(num)):
+        expected += num[i]*per[i]
+    return expected
+
 def print_percents(n,m,p=4):
     precision = "{:."+str(p)+"%}"
     for terms in prob(n,m):
         print(str(terms[0])+" : "+precision.format(terms[1]))
 
-#n = number of dice, #m = number of sides
+#ndm
 def graph_percents(n,m, x = [], y = []):
     p = prob(n,m)
     for e in p:
         x.append(e[0])
         y.append(e[1])
-    plt.bar(x, y, align = 'center')
     plt.title(str(n)+"d"+str(m))
-    plt.xticks(range(min(x), max(x)+1, 2))
+    plt.bar(x, y, align = 'center')
+    plt.xticks(range(min(x), max(x)+1, 2)) 
     plt.gca().set_yticklabels(['{:.0f}%'.format(x*100) for x in plt.gca().get_yticks()]) 
     plt.xlabel("Sums")
     plt.ylabel("Percent %")
+    plt.text(min(x), max(y), s = "Expected value: "+str(expected(x,y)))
     plt.show()
 
 def save_prob(n,m):
