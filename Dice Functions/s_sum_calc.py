@@ -13,22 +13,22 @@ def nCk(n,k):
     # reduce that fraction and convert the number back into an integer.
 
 
-def sum_calc(S,n,m):
+def sum_calc(S,n,f):
     # inclusion/exclusion principal
     # S = sum, n = # of dice, m = # of faces
-    return reduce(lambda x,y: x + y ,((-1)**r*nCk((S-1-m*r), n-1)*nCk(n,r) for r in range(int(floor((S-n)/float(m)))+1)), 0)
+    return reduce(lambda x,y: x + y ,((-1)**r*nCk((S-1-f*r), n-1)*nCk(n,r) for r in range(int(floor((S-n)/float(f)))+1)), 0)
 
 # dice probability using recursive discrete convolution
 #n = number of dice, k = sum total, f = number of die faces
-def conv(n, k, f):
-    s = 0
+def conv(S, n, f):
+    ret = 0
     if n == 1:
         return 1/f
-    if n == k:
+    if n == S:
         return 1/(f**n)
-    for j in range(max(1,k-f*(n-1)), min(f+1, k-(n-1)+1)):
-        s += conv(n-1, k-j, f) * conv(1, j, f)
-    return s
+    for j in range(max(1, S-f*(n-1)), min(f+1, S-(n-1)+1)):
+        ret += conv(S-j, n-1, f) * conv(j, 1, f)
+    return ret
 
 
 def prob(n,m):
