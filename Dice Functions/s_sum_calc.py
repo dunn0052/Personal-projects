@@ -20,7 +20,7 @@ def sum_calc(S,n,f):
 
 # dice probability using recursive discrete convolution
 #n = number of dice, k = sum total, f = number of die faces
-def conv(S, n, f):
+def conv(S,n,f):
     ret = 0
     if n == 1:
         return 1/f
@@ -34,15 +34,19 @@ def conv(S, n, f):
 def prob(n,m):
         return map(lambda i: [i, sum_calc(i,n,m)/float(m**n)], range(n,n*m+1))
 
+def conv_prob(n,m):
+    return map(lambda i: [i, conv(i,n,m)], range(n,n*m+1))
+
 def expected(num, per):
     expected = 0
     for i in range(len(num)):
         expected += num[i]*per[i]
     return expected
 
-def print_percents(n,m,p=4):
+def print_percents(n,m,p=4, f = prob):
+    # prob default because it's waaay faster
     precision = "{:."+str(p)+"%}"
-    for terms in prob(n,m):
+    for terms in f(n,m):
         print(str(terms[0])+" : "+precision.format(terms[1]))
 
 #ndm
